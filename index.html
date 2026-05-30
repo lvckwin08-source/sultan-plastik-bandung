@@ -24,9 +24,6 @@
 .hero-bullets li::before { content: '→'; color: var(--amber-dark); font-weight: 700; font-family: var(--font-mono); }
 .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
 .hero-image-box { background: var(--ink); aspect-ratio: 4/5; position: relative; overflow: hidden; border: 2px solid var(--ink); }
-.hero-image-placeholder { width: 100%; height: 100%; background: repeating-linear-gradient(45deg, #2a2a2a 0, #2a2a2a 2px, transparent 2px, transparent 24px), var(--ink); display: flex; align-items: center; justify-content: center; flex-direction: column; color: var(--amber); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; text-align: center; padding: 24px; position: relative; }
-.hero-image-placeholder::before { content: ''; position: absolute; inset: 16px; border: 1px solid rgba(212,160,23,0.3); }
-.hero-image-placeholder .label { background: var(--amber); color: var(--ink); padding: 8px 16px; font-weight: 700; margin-bottom: 12px; }
 .hero-image-tag { position: absolute; bottom: 16px; left: 16px; right: 16px; z-index: 2; background: var(--amber); padding: 12px 16px; color: var(--ink); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; display: flex; justify-content: space-between; font-weight: 700; }
 .trust-strip { background: var(--ink); color: var(--base); padding: 24px 0; overflow: hidden; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
 .trust-label { font-family: var(--font-mono); font-size: 11px; color: var(--amber); letter-spacing: 0.18em; text-transform: uppercase; padding: 0 32px; margin-bottom: 16px; max-width: 1280px; margin-left: auto; margin-right: auto; }
@@ -57,30 +54,37 @@
 .service-link { font-family: var(--font-mono); font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 8px; display: inline-flex; align-items: center; gap: 8px; }
 .service-link::after { content: '→'; transition: transform 0.2s; }
 .service-card:hover .service-link::after { transform: translateX(4px); }
+
+/* Portfolio Section Custom Styles */
 .portfolio-section { background: var(--ink); color: var(--base); padding: 96px 0; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
 .portfolio-section .section-label { color: var(--amber); }
 .portfolio-section .section-label::before { background: var(--amber); }
+.portfolio-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
+.portfolio-item { background: #2a2a2a; aspect-ratio: 1/1; position: relative; overflow: hidden; border: 1px solid rgba(245,245,242,0.1); }
+.portfolio-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+.portfolio-item:hover img { transform: scale(1.05); }
+.portfolio-label { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); padding: 20px 16px 12px; font-family: var(--font-mono); font-size: 11px; color: var(--base); letter-spacing: 0.05em; transform: translateY(4px); opacity: 0; transition: all 0.3s ease; }
+.portfolio-item:hover .portfolio-label { transform: translateY(0); opacity: 1; }
 .portfolio-cta { margin-top: 48px; text-align: center; }
+
 .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; margin-top: 48px; }
 .step { padding: 48px 40px; border: 1px solid var(--line); background: var(--surface); margin-left: -1px; margin-top: -1px; position: relative; }
 .step-num { font-family: var(--font-display); font-size: 96px; line-height: 1; color: var(--amber); margin-bottom: 16px; }
 .step-title { font-family: var(--font-display); font-size: 32px; text-transform: uppercase; line-height: 1; margin-bottom: 16px; }
 .step-desc { font-size: 14px; line-height: 1.6; color: var(--ink-soft); }
-.testi-section { background: var(--amber); padding: 96px 0; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); }
-.testi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 32px; margin-top: 48px; }
 @media (max-width: 1024px) {
     .hero-grid { grid-template-columns: 1fr; }
     .hero-image-box { aspect-ratio: 16/10; max-height: 500px; }
     .usp-grid { grid-template-columns: repeat(2, 1fr); }
     .services-grid { grid-template-columns: 1fr; }
+    .portfolio-grid { grid-template-columns: repeat(2, 1fr); }
     .steps-grid { grid-template-columns: 1fr; }
-    .testi-grid { grid-template-columns: 1fr; }
     .services-header { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
     .usp-grid { grid-template-columns: 1fr; }
+    .portfolio-grid { grid-template-columns: 1fr; }
     .hero-cta { flex-direction: column; align-items: stretch; }
-    .btn { justify-content: center; }
 }
 </style>
 </head>
@@ -123,10 +127,7 @@
                 </div>
             </div>
             <div class="hero-image-box">
-                <div class="hero-image-placeholder">
-                    <div class="label">FOTO HERO</div>
-                    Meja sablon manual jalan<br>+<br>Stack polymailer PUTIH LW
-                </div>
+                <img src="assets/Printelhsna.jpg" alt="Hero Sultan Plastik" style="width: 100%; height: 100%; object-fit: cover; display: block;">
                 <div class="hero-image-tag"><span>PUTIH LW · 0.6μ</span><span>SIGNATURE</span></div>
             </div>
         </div>
@@ -136,12 +137,6 @@
 <section class="trust-strip">
     <div class="trust-label">DIPERCAYA OLEH 100+ BRAND FASHION INDONESIA →</div>
     <div class="marquee">
-        <div class="marquee-item"><span class="dot"></span>BRAND FASHION 01</div>
-        <div class="marquee-item"><span class="dot"></span>STREETWEAR LABEL</div>
-        <div class="marquee-item"><span class="dot"></span>HYPE COLLECTIVE</div>
-        <div class="marquee-item"><span class="dot"></span>URBAN APPAREL</div>
-        <div class="marquee-item"><span class="dot"></span>PREMIUM CLOTH CO</div>
-        <div class="marquee-item"><span class="dot"></span>INDIE BRAND BDG</div>
         <div class="marquee-item"><span class="dot"></span>BRAND FASHION 01</div>
         <div class="marquee-item"><span class="dot"></span>STREETWEAR LABEL</div>
         <div class="marquee-item"><span class="dot"></span>HYPE COLLECTIVE</div>
@@ -180,73 +175,49 @@
     </div>
 </section>
 
-<section class="section" style="background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
-    <div class="container">
-        <div class="section-label"><span><span class="section-num">02 / 06</span> — LAYANAN</span></div>
-        <div class="services-header">
-            <h2 class="display display-l">Tiga<br>jenis<br>layanan.</h2>
-            <p class="lede">Semua untuk satu tujuan: bantuin brand lo punya kemasan yang konsisten, cepat dikirim, dan layak untuk customer.</p>
-        </div>
-        <div class="services-grid">
-            <a href="polymailer.html" style="text-decoration: none; color: inherit;">
-                <div class="service-card">
-                    <div class="service-tag amber"><span>01 — SIGNATURE</span><span>★</span></div>
-                    <div class="service-image">PUTIH LW PRODUCT SHOT</div>
-                    <div class="service-body">
-                        <h3 class="service-title">Polymailer<br>Putih LW</h3>
-                        <p class="service-desc">Signature kami. Double layer 0.6 micron, putih premium, ekstra tebal untuk pengiriman jauh. Ideal untuk brand fashion premium.</p>
-                        <div class="service-meta"><strong>4 UKURAN READY:</strong><br>20×30+5 · 25×35+5 · 30×40+5 · 35×45+5</div>
-                        <span class="service-link">Lihat Detail</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="polymailer.html" style="text-decoration: none; color: inherit;">
-                <div class="service-card">
-                    <div class="service-tag"><span>02 — PRODUCT LINE</span><span>◇</span></div>
-                    <div class="service-image">POLYMAILER LINE GRID</div>
-                    <div class="service-body">
-                        <h3 class="service-title">Polymailer<br>Line Lengkap</h3>
-                        <p class="service-desc">Berbagai warna &amp; ukuran untuk semua segmen brand — olshop fashion, F&amp;B, skincare, aksesoris.</p>
-                        <div class="service-meta"><strong>STOK PERMANEN:</strong> 17×30 ke atas<br><strong>BY REQUEST:</strong> Ukuran di bawah itu</div>
-                        <span class="service-link">Lihat Katalog</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="jasa-sablon.html" style="text-decoration: none; color: inherit;">
-                <div class="service-card">
-                    <div class="service-tag"><span>03 — SERVICE</span><span>◆</span></div>
-                    <div class="service-image">SABLON WORKSHOP SHOT</div>
-                    <div class="service-body">
-                        <h3 class="service-title">Jasa Sablon<br>Manual</h3>
-                        <p class="service-desc">Custom logo brand lo di polymailer apapun. Dari MOQ kecil sampai produksi massal 10.000+ pcs.</p>
-                        <div class="service-meta"><strong>MULTI-WARNA</strong> · Detail tinggi<br><strong>KAPASITAS:</strong> 5.000 pcs/meja/hari</div>
-                        <span class="service-link">Cara Order</span>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </div>
-</section>
-
 <section class="portfolio-section">
     <div class="container">
-        <div class="section-label"><span><span class="section-num">03 / 06</span> — PORTFOLIO</span></div>
+        <div class="section-label"><span><span class="section-num">02 / 06</span> — PORTFOLIO SABLON</span></div>
         <div style="display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: end; margin-bottom: 32px;">
             <h2 class="display display-l">Hasil sablon<br>dari brand yang<br><span style="color: var(--amber);">stay sama kami.</span></h2>
-            <p class="lede" style="color: rgba(245,245,242,0.7); max-width: 360px;">100+ brand fashion Indonesia. Setiap order = setiap meja jalan.</p>
+            <p class="lede" style="color: rgba(245,245,242,0.7); max-width: 360px;">Real production shot langsung dari workshop Sultan Plastik Bandung.</p>
         </div>
+        
         <div class="portfolio-grid">
-            <div class="portfolio-item"><div class="portfolio-label">PUTIH LW · 30×40+5 · 2W · 1500pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">STANDARD · 25×35 · 1W · 3000pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">PUTIH LW · 35×45+5 · 3W · 1000pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">STANDARD · 20×30 · 2W · 5000pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">PUTIH LW · 25×35+5 · 1W · 2000pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">STANDARD · 30×40 · 4W · 800pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">PUTIH LW · 20×30+5 · 2W · 4000pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">STANDARD · 35×45 · 1W · 1200pcs</div></div>
+            <div class="portfolio-item">
+                <img src="assets/hasil-sablon/1..jpeg" alt="Hasil Sablon 1">
+                <div class="portfolio-label">WORKSHOP SHOT 01</div>
+            </div>
+            <div class="portfolio-item">
+                <img src="assets/hasil-sablon/2..jpeg" alt="Hasil Sablon 2">
+                <div class="portfolio-label">WORKSHOP SHOT 02</div>
+            </div>
+            <div class="portfolio-item">
+                <img src="assets/hasil-sablon/3..jpeg" alt="Hasil Sablon 3">
+                <div class="portfolio-label">WORKSHOP SHOT 03</div>
+            </div>
+            <div class="portfolio-item">
+                <img src="assets/hasil-sablon/4..jpeg" alt="Hasil Sablon 4">
+                <div class="portfolio-label">WORKSHOP SHOT 04</div>
+            </div>
+            <div class="portfolio-item">
+                <img src="assets/hasil-sablon/5..jpeg" alt="Hasil Sablon 5">
+                <div class="portfolio-label">WORKSHOP SHOT 05</div>
+            </div>
+            <div class="portfolio-item">
+                <img src="assets/hasil-sablon/6..jpeg" alt="Hasil Sablon 6">
+                <div class="portfolio-label">WORKSHOP SHOT 06</div>
+            </div>
+            <div class="portfolio-item">
+                <img src="assets/hasil-sablon/7..jpeg" alt="Hasil Sablon 7">
+                <div class="portfolio-label">WORKSHOP SHOT 07</div>
+            </div>
+            <div class="portfolio-item">
+                <img src="assets/hasil-sablon/8..jpeg" alt="Hasil Sablon 8">
+                <div class="portfolio-label">WORKSHOP SHOT 08</div>
+            </div>
         </div>
+        
         <div class="portfolio-cta">
             <a href="portfolio.html" class="btn btn-amber btn-lg">Lihat Semua Portfolio →</a>
         </div>
@@ -255,7 +226,7 @@
 
 <section class="section">
     <div class="container">
-        <div class="section-label"><span><span class="section-num">04 / 06</span> — CARA ORDER</span></div>
+        <div class="section-label"><span><span class="section-num">03 / 06</span> — CARA ORDER</span></div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end;">
             <h2 class="display display-l">Tiga<br>langkah,<br>selesai.</h2>
             <p class="lede">Dari chat WhatsApp pertama sampai barang nyampe — transparan, gak ribet.</p>
@@ -264,81 +235,17 @@
             <div class="step">
                 <div class="step-num">01</div>
                 <h3 class="step-title">Chat<br>WhatsApp</h3>
-                <p class="step-desc">Kirim spec: produk apa (PUTIH LW / standard), ukuran, quantity, mau sablon atau gak, lokasi pengiriman. Tim balas dalam 30 menit.</p>
+                <p class="step-desc">Kirim spec: produk apa (PUTIH LW / standard), ukuran, quantity, mau sablon atau gak, lokasi pengiriman.</p>
             </div>
             <div class="step">
                 <div class="step-num">02</div>
                 <h3 class="step-title">Konsul +<br>Quotation</h3>
-                <p class="step-desc">Kami review desain, kasih quote detail, plus mock-up sablon kalau perlu. Konsul GRATIS, gak ada hidden fee.</p>
+                <p class="step-desc">Kami review desain, kasih quote detail, plus mock-up sablon kalau perlu. Konsul GRATIS.</p>
             </div>
             <div class="step">
                 <div class="step-num">03</div>
                 <h3 class="step-title">Produksi<br>+ Kirim</h3>
-                <p class="step-desc">DP 50%, produksi mulai. Selesai, kirim. Kota Bandung free ongkir. Luar kota via ekspedisi pilihan lo.</p>
-            </div>
-        </div>
-        <div style="margin-top: 48px; text-align: center;">
-            <a href="cara-order.html" class="btn btn-primary btn-lg">Lihat Detail Cara Order →</a>
-        </div>
-    </div>
-</section>
-
-<section class="testi-section">
-    <div class="container">
-        <div class="section-label" style="color: var(--ink);"><span><span class="section-num" style="color: var(--ink);">05 / 06</span> — TESTIMONI</span></div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: end;">
-            <h2 class="display display-l">Cerita dari<br>brand yang<br>bergabung.</h2>
-            <p class="lede" style="color: var(--ink);">Bukan kata-kata kami. Suara brand yang udah lama kerja bareng — dari fashion startup sampai brand established.</p>
-        </div>
-        <div class="testi-grid">
-            <div class="testi-card">
-                <div class="testi-quote">"</div>
-                <p class="testi-body">Respons cepet banget. Order 1000 pcs PUTIH LW + sablon logo, jam 9 pagi konsul, sore quote keluar, 2 hari kemudian barang sampe. Kualitas konsisten.</p>
-                <div class="testi-meta"><div class="testi-author">@namabrand_fashion</div><div class="testi-detail">BANDUNG · REGULAR ORDER</div></div>
-            </div>
-            <div class="testi-card">
-                <div class="testi-quote">"</div>
-                <p class="testi-body">Pertama coba polymailer standard mereka, kualitasnya udah bagus. Lama-lama upgrade ke PUTIH LW, dan gak balik lagi ke supplier lain.</p>
-                <div class="testi-meta"><div class="testi-author">@namabrand_premium</div><div class="testi-detail">BALI · LOYAL 3 TAHUN</div></div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="section">
-    <div class="container">
-        <div class="section-label"><span><span class="section-num">06 / 06</span> — FAQ</span></div>
-        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 64px; align-items: start;">
-            <div>
-                <h2 class="display display-l">Pertanyaan<br>yang sering<br>ditanya.</h2>
-                <p class="lede" style="margin-top: 24px;">Belum kejawab? Chat langsung ke tim kami — kita siap konsul detail.</p>
-                <a href="#" class="btn btn-primary" style="margin-top: 32px;">💬 Chat WhatsApp</a>
-            </div>
-            <div class="faq-list">
-                <div class="faq-item open">
-                    <button class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-num">01.</span><span class="faq-q-text">Berapa MOQ minimum untuk sablon custom?</span><span class="faq-toggle">+</span></button>
-                    <div class="faq-a"><p class="faq-a-text">MOQ fleksibel. Bisa di bawah 1000 pcs dengan biaya moulding Rp 100.000 (kami simpan untuk reorder gratis). MOQ ≥1000 pcs, moulding GRATIS.</p></div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-num">02.</span><span class="faq-q-text">Berapa lama produksinya?</span><span class="faq-toggle">+</span></button>
-                    <div class="faq-a"><p class="faq-a-text">Order 10.000 pcs bisa beres dalam 1 hari (partial delivery, by request). Untuk order lebih besar, timeline kami diskusi di awal.</p></div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-num">03.</span><span class="faq-q-text">Apa itu PUTIH LW dan apa bedanya?</span><span class="faq-toggle">+</span></button>
-                    <div class="faq-a"><p class="faq-a-text">PUTIH LW adalah polymailer signature kami: double layer 0.6 micron, warna putih premium. Cocok untuk brand fashion yang butuh packaging tahan ekspedisi jauh dengan tampilan high-end.</p></div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-num">04.</span><span class="faq-q-text">Bisa kirim ke luar kota Bandung?</span><span class="faq-toggle">+</span></button>
-                    <div class="faq-a"><p class="faq-a-text">Bisa. Kota Bandung free ongkir. Kabupaten Bandung free untuk order full. Luar kota via ekspedisi pilihan lo — ongkir bayar di tempat.</p></div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-num">05.</span><span class="faq-q-text">Selain PUTIH LW, jual polymailer apa lagi?</span><span class="faq-toggle">+</span></button>
-                    <div class="faq-a"><p class="faq-a-text">Polymailer line lengkap: berbagai ukuran (mulai 17×30 ke atas stok permanen) & warna. Ukuran di bawah 17×30 atau warna custom bisa di-request.</p></div>
-                </div>
-                <div class="faq-item">
-                    <button class="faq-q" onclick="toggleFaq(this)"><span class="faq-q-num">06.</span><span class="faq-q-text">Sistem pembayaran gimana?</span><span class="faq-toggle">+</span></button>
-                    <div class="faq-a"><p class="faq-a-text">DP 50% di awal (setelah ACC quotation), pelunasan setelah barang siap kirim. Transfer ke BCA/BRI/Mandiri atau QRIS.</p></div>
-                </div>
+                <p class="step-desc">DP 50%, produksi mulai. Selesai, kirim. Kota Bandung free ongkir. Luar kota via ekspedisi.</p>
             </div>
         </div>
     </div>
@@ -350,35 +257,15 @@
         <p>Konsul gratis, request sample, tim kami siap diskusi kebutuhan packaging lo. Mulai hari ini.</p>
         <div class="final-cta-buttons">
             <a href="#" class="btn btn-amber btn-lg">💬 Chat WhatsApp Sekarang</a>
-            <a href="tentang.html" class="btn btn-secondary btn-lg" style="border-color: var(--base); color: var(--base);">📍 Tentang Kami</a>
         </div>
     </div>
 </section>
 
 <footer class="footer">
     <div class="container">
-        <div class="footer-grid">
-            <div class="footer-brand">
-                <div class="logo">Sultan Plastik</div>
-                <div class="logo-sub">Bandung · since 2020</div>
-                <p>Polymailer premium PUTIH LW &amp; jasa sablon manual untuk brand fashion Indonesia. 6 tahun dipercaya 100+ brand.</p>
-            </div>
-            <div class="footer-col"><h4>Layanan</h4><ul><li><a href="polymailer.html">Polymailer PUTIH LW</a></li><li><a href="polymailer.html">Line Lengkap</a></li><li><a href="jasa-sablon.html">Jasa Sablon</a></li><li><a href="cara-order.html">Cara Order</a></li></ul></div>
-            <div class="footer-col"><h4>Sultan Plastik</h4><ul><li><a href="tentang.html">Tentang Kami</a></li><li><a href="portfolio.html">Portfolio</a></li><li><a href="blog.html">Blog</a></li></ul></div>
-            <div class="footer-col"><h4>Kontak</h4><ul><li><a href="#">💬 WhatsApp</a></li><li><a href="#">📷 Instagram</a></li><li><a href="#">🎵 TikTok</a></li><li>Sen–Sab · 08–17 WIB</li></ul></div>
-        </div>
         <div class="footer-bottom"><div>© 2026 Sultan Plastik Bandung</div><div>POLYMAILER · SABLON · BANDUNG</div></div>
     </div>
 </footer>
-
-<script>
-function toggleFaq(btn) {
-    const item = btn.parentElement;
-    const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-    if (!isOpen) item.classList.add('open');
-}
-</script>
 
 </body>
 </html>
