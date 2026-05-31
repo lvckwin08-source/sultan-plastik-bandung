@@ -15,15 +15,16 @@ const SULTAN_CONFIG = {
 
     // ====== KONTAK ======
     contact: {
-        // Nomor WhatsApp format internasional TANPA tanda + dan TANPA spasi
-        // Contoh: 6281234567890 (Indonesia diawali 62, hapus 0 di depan)
-        whatsapp: '6281234567890',
+        // Nomor WA KONSUL (lo sendiri) — untuk tanya-tanya, info produk
+        whatsapp: '6281947931800',
+        whatsappMessage: 'Halo Sultan Plastik, saya mau konsultasi soal polymailer dan jasa sablon.',
 
-        // Pesan default yang muncul pas customer klik WhatsApp
-        whatsappMessage: 'Halo Sultan Plastik, saya mau konsul soal polymailer dan jasa sablon.',
+        // Nomor WA ORDER (admin) — untuk harga & order
+        whatsappAdmin: '6282127644474',
+        whatsappAdminMessage: 'Halo Admin Sultan Plastik, saya mau tanya harga dan order polymailer.',
 
-        // Email (opsional, kosongin kalo gak ada)
-        email: 'halo@sultanplastik.com',
+        // Email (opsional)
+        email: '',
 
         // Jam operasional
         hours: 'Senin–Sabtu · 08–17 WIB',
@@ -31,26 +32,19 @@ const SULTAN_CONFIG = {
 
     // ====== ALAMAT WORKSHOP ======
     address: {
-        // Alamat lengkap workshop
         full: 'Jl. Contoh No. 123, Kecamatan Contoh, Kota Bandung, Jawa Barat 40000',
-
-        // Link Google Maps (cara dapet: buka workshop di Google Maps → Share → Copy link)
         mapsUrl: 'https://maps.google.com/?q=Sultan+Plastik+Bandung',
-
-        // Embed Google Maps (opsional, untuk iframe map di page Tentang)
-        // Cara dapet: Google Maps → Share → Embed → copy bagian src="..."
         mapsEmbed: 'https://www.google.com/maps/embed?pb=YOUR_EMBED_CODE_HERE',
     },
 
     // ====== SOCIAL MEDIA ======
     social: {
-        instagram: 'https://instagram.com/sultanplastik',
-        instagramHandle: '@sultanplastik',
+        instagram: '',
+        instagramHandle: '',
 
-        tiktok: 'https://tiktok.com/@sultanplastik',
-        tiktokHandle: '@sultanplastik',
+        tiktok: 'https://tiktok.com/@packking99',
+        tiktokHandle: '@packking99',
 
-        // Opsional, kosongin kalo gak ada
         facebook: '',
         twitter: '',
     },
@@ -63,7 +57,7 @@ const SULTAN_CONFIG = {
         currentYear: 2026,
     },
 
-    // ====== STATS (untuk halaman Tentang) ======
+    // ====== STATS ======
     stats: {
         years: '6',
         brands: '100+',
@@ -72,7 +66,6 @@ const SULTAN_CONFIG = {
     },
 
     // ====== TESTIMONI ======
-    // Tambah/kurang testimoni di sini, otomatis muncul di homepage & portfolio
     testimonials: [
         {
             quote: 'Respons cepet banget. Order 1000 pcs PUTIH LW + sablon logo, jam 9 pagi konsul, sore quote keluar, 2 hari kemudian barang sampe. Kualitas konsisten.',
@@ -96,67 +89,82 @@ const SULTAN_CONFIG = {
         },
     ],
 
-    // ====== BRAND PARTNERS (marquee strip di homepage) ======
-    // Daftar brand customer untuk ditampilin di marquee homepage
+    // ====== BRAND PARTNERS (marquee homepage) ======
     partnerBrands: [
-        'BRAND FASHION 01',
-        'STREETWEAR LABEL',
-        'HYPE COLLECTIVE',
-        'URBAN APPAREL',
-        'PREMIUM CLOTH CO',
-        'INDIE BRAND BDG',
+        'KULSOEM',
+        'DREAMSTORY',
+        'INIKAMI HIJAB',
+        'UNITED',
+        'ALOOMNI',
+        'ALIS MILIARTA',
     ],
 
 };
 
 /* ==========================================================
    AUTO-INJECT SCRIPT (jangan diubah dari sini ke bawah!)
-   Script ini otomatis isi semua placeholder di HTML.
    ========================================================== */
 
 (function() {
     const c = SULTAN_CONFIG;
 
-    // Build WhatsApp URL
-    const waUrl = `https://wa.me/${c.contact.whatsapp}?text=${encodeURIComponent(c.contact.whatsappMessage)}`;
+    // Build WhatsApp URLs
+    const waKonsulUrl = `https://wa.me/${c.contact.whatsapp}?text=${encodeURIComponent(c.contact.whatsappMessage)}`;
+    const waAdminUrl  = `https://wa.me/${c.contact.whatsappAdmin}?text=${encodeURIComponent(c.contact.whatsappAdminMessage)}`;
 
     document.addEventListener('DOMContentLoaded', function() {
 
-        // 1. Replace semua link WhatsApp (data-link="whatsapp" atau href="#wa")
+        // 1. Tombol KONSUL → nomor lo (owner)
+        // href="#wa" atau data-link="whatsapp"
         document.querySelectorAll('a[data-link="whatsapp"], a[href="#wa"]').forEach(el => {
-            el.href = waUrl;
+            el.href   = waKonsulUrl;
             el.target = '_blank';
-            el.rel = 'noopener';
+            el.rel    = 'noopener';
         });
 
-        // 2. Replace semua link Instagram
-        document.querySelectorAll('a[data-link="instagram"], a[href="#ig"]').forEach(el => {
-            el.href = c.social.instagram;
+        // 2. Tombol ORDER / HARGA → nomor admin
+        // href="#wa-admin" atau data-link="whatsapp-admin"
+        document.querySelectorAll('a[data-link="whatsapp-admin"], a[href="#wa-admin"]').forEach(el => {
+            el.href   = waAdminUrl;
             el.target = '_blank';
-            el.rel = 'noopener';
+            el.rel    = 'noopener';
         });
 
-        // 3. Replace semua link TikTok
+        // 3. TikTok
         document.querySelectorAll('a[data-link="tiktok"], a[href="#tt"]').forEach(el => {
-            el.href = c.social.tiktok;
+            el.href   = c.social.tiktok;
             el.target = '_blank';
-            el.rel = 'noopener';
+            el.rel    = 'noopener';
         });
 
-        // 4. Replace semua link Google Maps
+        // 4. Instagram (kalo kosong, sembunyiin)
+        document.querySelectorAll('a[data-link="instagram"], a[href="#ig"]').forEach(el => {
+            if (c.social.instagram) {
+                el.href   = c.social.instagram;
+                el.target = '_blank';
+                el.rel    = 'noopener';
+            } else {
+                el.style.display = 'none';
+            }
+        });
+
+        // 5. Google Maps
         document.querySelectorAll('a[data-link="maps"], a[href="#maps"]').forEach(el => {
-            el.href = c.address.mapsUrl;
+            el.href   = c.address.mapsUrl;
             el.target = '_blank';
-            el.rel = 'noopener';
+            el.rel    = 'noopener';
         });
 
-        // 5. Replace semua link Email
+        // 6. Email
         document.querySelectorAll('a[data-link="email"], a[href="#email"]').forEach(el => {
-            el.href = `mailto:${c.contact.email}`;
+            if (c.contact.email) {
+                el.href = `mailto:${c.contact.email}`;
+            } else {
+                el.style.display = 'none';
+            }
         });
 
-        // 6. Replace text dynamic dengan data-config attribute
-        // Contoh: <span data-config="contact.hours"></span> → "Senin–Sabtu · 08–17 WIB"
+        // 7. data-config text injection
         document.querySelectorAll('[data-config]').forEach(el => {
             const path = el.dataset.config.split('.');
             let value = c;
@@ -164,22 +172,17 @@ const SULTAN_CONFIG = {
                 value = value?.[key];
                 if (value === undefined) break;
             }
-            if (value !== undefined) {
-                el.textContent = value;
-            }
+            if (value !== undefined) el.textContent = value;
         });
 
-        // 7. Inject alamat (untuk tag dengan data-config="address.full")
-        // udah ke-handle di point 6
-
-        // 8. Inject Google Maps embed (untuk iframe dengan data-maps-embed)
+        // 8. Google Maps embed
         document.querySelectorAll('[data-maps-embed]').forEach(el => {
-            if (c.address.mapsEmbed && c.address.mapsEmbed !== 'https://www.google.com/maps/embed?pb=YOUR_EMBED_CODE_HERE') {
+            if (c.address.mapsEmbed && !c.address.mapsEmbed.includes('YOUR_EMBED_CODE_HERE')) {
                 el.src = c.address.mapsEmbed;
             }
         });
 
-        // 9. Auto-update copyright year
+        // 9. Auto copyright year
         document.querySelectorAll('[data-config="brand.currentYear"]').forEach(el => {
             el.textContent = new Date().getFullYear();
         });
