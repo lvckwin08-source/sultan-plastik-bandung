@@ -320,6 +320,15 @@ tbody tr:hover td{background:#F9F8F4}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Database Customer
       </button>
+      <div class="sb-sec" id="kas-sec">Keuangan</div>
+      <button class="ni" data-page="kas" onclick="gp('kas',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        Input Kas
+      </button>
+      <button class="ni owner-only" id="ni-lapkas" data-page="lapkas" onclick="gp('lapkas',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Laporan Keuangan
+      </button>
       <div class="sb-sec" id="lap-sec">Analitik</div>
       <button class="ni" id="ni-lap" data-page="laporan" onclick="gp('laporan',this)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
@@ -344,6 +353,7 @@ tbody tr:hover td{background:#F9F8F4}
       <div class="tb-right">
         <div id="tb-date"></div>
         <div id="tb-info" style="margin-top:2px"></div>
+        <div id="fb-status" style="margin-top:3px;font-size:10px;padding:2px 8px;border-radius:99px;background:#FAEEDA;color:#7A5C10">Connecting...</div>
       </div>
     </div>
     <div class="content">
@@ -547,6 +557,91 @@ tbody tr:hover td{background:#F9F8F4}
         </div>
       </div>
 
+
+      <!-- INPUT KAS -->
+      <div class="page" id="page-kas">
+        <div class="card">
+          <div class="card-title">Input Kas Harian</div>
+          <div class="g2">
+            <div class="fg"><label>Tanggal</label><input type="date" id="kas-tgl"></div>
+            <div class="fg"><label>Tipe</label>
+              <select id="kas-tipe" onchange="onKasTipe()">
+                <option value="masuk">💰 Uang Masuk</option>
+                <option value="keluar">💸 Uang Keluar</option>
+              </select>
+            </div>
+          </div>
+          <div class="g2" style="margin-top:12px">
+            <div class="fg"><label>Kategori</label>
+              <select id="kas-kat">
+                <option value="Penjualan">Penjualan</option>
+                <option value="Ongkir Masuk">Ongkir Masuk</option>
+                <option value="Lain-lain Masuk">Lain-lain Masuk</option>
+              </select>
+            </div>
+            <div class="fg"><label>Nominal (Rp)</label><input type="number" id="kas-nominal" min="0" placeholder="0"></div>
+          </div>
+          <div class="fg" style="margin-top:12px"><label>Keterangan</label><input type="text" id="kas-ket" placeholder="Keterangan transaksi kas..."></div>
+          <div class="btn-row">
+            <button class="btn btn-gold" onclick="simpanKas()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Simpan Kas
+            </button>
+            <button class="btn" onclick="resetKas()">Reset</button>
+          </div>
+        </div>
+        <div style="margin-top:16px">
+          <div style="font-weight:700;font-size:13px;margin-bottom:10px">Riwayat Kas Hari Ini</div>
+          <div class="tw">
+            <table>
+              <thead><tr><th>Tanggal</th><th>Tipe</th><th>Kategori</th><th>Keterangan</th><th class="r">Nominal</th><th></th></tr></thead>
+              <tbody id="tbl-kas"><tr><td colspan="6" style="text-align:center;padding:24px;color:var(--txt3)">Belum ada data kas</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- LAPORAN KEUANGAN (OWNER ONLY) -->
+      <div class="page" id="page-lapkas">
+        <div class="frow">
+          <select class="fsel" id="lapkas-bln" onchange="renderLapKas()">
+            <option value="6-2026">Juni 2026</option>
+            <option value="5-2026">Mei 2026</option>
+            <option value="4-2026">April 2026</option>
+            <option value="3-2026">Maret 2026</option>
+          </select>
+          <button class="btn btn-sm" onclick="exportKasCSV()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="stat-lbl">Omzet (dari Nota)</div><div class="stat-val gold" id="lk-omz">Rp 0</div></div>
+          <div class="stat"><div class="stat-lbl">HPP Total</div><div class="stat-val" id="lk-hpp" style="color:var(--red)">Rp 0</div></div>
+          <div class="stat"><div class="stat-lbl">Pengeluaran Kas</div><div class="stat-val" id="lk-keluar" style="color:var(--red)">Rp 0</div></div>
+          <div class="stat" style="border:2px solid var(--gold)"><div class="stat-lbl">PROFIT BERSIH</div><div class="stat-val green" id="lk-profit">Rp 0</div><div class="stat-hint" id="lk-profit-pct">Margin: 0%</div></div>
+        </div>
+        <div class="lap-grid">
+          <div class="lap-card">
+            <div class="lap-card-title">Ringkasan Kas Masuk</div>
+            <div id="lk-masuk-detail"><div style="text-align:center;padding:16px;color:var(--txt3);font-size:12px">Belum ada data</div></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-top:1.5px solid var(--bdr);margin-top:8px;font-weight:700;font-size:12px"><span>Total Masuk</span><span id="lk-masuk-total" style="color:var(--green)">Rp 0</span></div>
+          </div>
+          <div class="lap-card">
+            <div class="lap-card-title">Ringkasan Kas Keluar</div>
+            <div id="lk-keluar-detail"><div style="text-align:center;padding:16px;color:var(--txt3);font-size:12px">Belum ada data</div></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-top:1.5px solid var(--bdr);margin-top:8px;font-weight:700;font-size:12px"><span>Total Keluar</span><span id="lk-keluar-total" style="color:var(--red)">Rp 0</span></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Detail Kas Bulan Ini</div>
+          <div class="tw"><table>
+            <thead><tr><th>Tanggal</th><th>Tipe</th><th>Kategori</th><th>Keterangan</th><th class="r">Masuk</th><th class="r">Keluar</th><th class="r">Saldo</th></tr></thead>
+            <tbody id="lk-table"><tr><td colspan="7" style="text-align:center;padding:24px;color:var(--txt3)">Belum ada data</td></tr></tbody>
+          </table></div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
@@ -595,6 +690,7 @@ tbody tr:hover td{background:#F9F8F4}
     <div class="print-toolbar">
       <div class="print-toolbar-title" id="print-title">Preview Nota</div>
       <div style="display:flex;gap:8px">
+        <button class="btn btn-sm" id="btn-switch-print" onclick="switchPrintType()" style="display:none">Lihat Surat Jalan</button>
         <button class="btn btn-gold btn-sm" onclick="window.print()">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
           Cetak / Print
@@ -634,20 +730,23 @@ function loadFirebase() {
         });
         db = firebase.firestore();
         console.log('Firebase connected!');
+        document.getElementById('fb-status').textContent='Online ✓';
+        document.getElementById('fb-status').style.background='#EAF3DE';
+        document.getElementById('fb-status').style.color='#1B5E3B';
         startFirebaseSync();
-      } catch(e) { console.warn('Firebase init failed:', e); }
+      } catch(e) { console.warn('Firebase init failed:', e); document.getElementById('fb-status').textContent='Offline'; document.getElementById('fb-status').style.background='#FCEBEB'; document.getElementById('fb-status').style.color='#B71C1C'; }
     };
     s2.onerror = function() { console.warn('Firestore SDK failed to load'); };
     document.head.appendChild(s2);
   };
-  s1.onerror = function() { console.warn('Firebase SDK failed to load'); };
+  s1.onerror = function() { console.warn('Firebase SDK failed to load'); document.getElementById('fb-status').textContent='Offline'; document.getElementById('fb-status').style.background='#FCEBEB'; document.getElementById('fb-status').style.color='#B71C1C'; };
   document.head.appendChild(s1);
 }
 
 // ===== STATE =====
 let PRODUK_DB = [...PRODUK_SEED];
 let CUST_DB = [...CUST_SEED];
-let transaksi = [];
+let transaksi = JSON.parse(localStorage.getItem('spb_trx')||'[]');
 let notaNum = parseInt(localStorage.getItem('spb_nota')||'158');
 let currentRole = 'owner';
 let selRoleVal = 'owner';
@@ -663,7 +762,7 @@ const fRpShort = n => {
   return fRp(n);
 };
 const fD = ts => new Date(ts).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
-const save = () => { localStorage.setItem('spb_nota',notaNum); };
+const save = () => { localStorage.setItem('spb_trx',JSON.stringify(transaksi)); localStorage.setItem('spb_nota',notaNum); };
 const saveProdukDB = () => localStorage.setItem('spb_produk', JSON.stringify(PRODUK_DB));
 const saveCustDB = () => localStorage.setItem('spb_cust', JSON.stringify(CUST_DB));
 
@@ -734,6 +833,15 @@ function startFirebaseSync() {
       });
     }
   });
+
+  // Listen to kas
+  db.collection('kas').orderBy('ts','desc').onSnapshot(snapshot => {
+    kasData = [];
+    snapshot.forEach(doc => kasData.push(doc.data()));
+    localStorage.setItem('spb_kas', JSON.stringify(kasData));
+    renderKas();
+    if(document.getElementById('page-lapkas').classList.contains('active')) renderLapKas();
+  }, err => { console.error('Kas sync error:', err); });
 
   // Listen to custom customer
   db.collection('customer_custom').onSnapshot(snapshot => {
@@ -831,6 +939,7 @@ function doLogin(){
     niLap.style.display = 'none';
     niDash.style.display = 'none';
     niRiwayat.style.display = 'none';
+    document.getElementById('ni-lapkas').style.display = 'none';
     // Go straight to transaksi page
     setTimeout(function(){ gp('transaksi', document.querySelector('[data-page="transaksi"]')); }, 100);
   }
@@ -881,8 +990,8 @@ function populateCustSelect(){
 }
 
 // ===== NAVIGATION =====
-const PAGE_TITLES = {dashboard:'Dashboard',transaksi:'Input Transaksi',riwayat:'Riwayat Nota',produk:'Katalog Produk',customer:'Database Customer',laporan:'Laporan Bulanan'};
-const PAGE_SUBS = {dashboard:'Ringkasan aktivitas bisnis',transaksi:'Buat nota transaksi baru — multi item per nota',riwayat:'Semua nota transaksi masuk',produk:'467 produk dari database barang',customer:'504 customer terdaftar',laporan:'Analitik & laporan per bulan'};
+const PAGE_TITLES = {dashboard:'Dashboard',transaksi:'Input Transaksi',riwayat:'Riwayat Nota',produk:'Katalog Produk',customer:'Database Customer',laporan:'Laporan Bulanan',kas:'Input Kas Harian',lapkas:'Laporan Keuangan'};
+const PAGE_SUBS = {dashboard:'Ringkasan aktivitas bisnis',transaksi:'Buat nota transaksi baru — multi item per nota',riwayat:'Semua nota transaksi masuk',produk:'467 produk dari database barang',customer:'504 customer terdaftar',laporan:'Analitik & laporan per bulan',kas:'Catat uang masuk & keluar harian',lapkas:'Ringkasan keuangan — omzet, HPP, pengeluaran, profit bersih'};
 function gp(p, el){
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   if(el) el.classList.add('active');
@@ -891,6 +1000,8 @@ function gp(p, el){
   document.getElementById('tb-title').textContent = PAGE_TITLES[p]||p;
   document.getElementById('tb-sub').textContent = PAGE_SUBS[p]||'';
   if(p==='laporan') renderLap();
+  if(p==='kas'){ renderKas(); document.getElementById('kas-tgl').value=new Date().toISOString().split('T')[0]; }
+  if(p==='lapkas') renderLapKas();
   if(p==='produk') renderProdTbl('');
   if(p==='customer') renderCustTbl('');
 }
@@ -1020,7 +1131,7 @@ function simpan(){
   fbSaveNota(nota);
   toast('Nota '+nota.id+' berhasil disimpan!','ok');
   // Auto open print
-  openPrint(nota.id);
+  openPrintInvoice(nota.id);
   resetTrx();
   renderAll();
   gp('riwayat', document.querySelector('[data-page="riwayat"]'));
@@ -1087,10 +1198,8 @@ function renderRiwayat(){
         <td class="r" style="white-space:nowrap;color:var(--green);font-weight:600">${fRp(t.margin)}</td>
         <td>${badge(t.status)}</td>
         <td style="white-space:nowrap">
-          <button class="btn btn-sm" onclick="openPrint('${t.id}')" style="margin-right:4px">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-            Print
-          </button>
+          <button class="btn btn-sm" onclick="openPrintInvoice('${t.id}')" style="margin-right:3px" title="Print Invoice">Invoice</button>
+          <button class="btn btn-sm" onclick="openPrintSJ('${t.id}')" style="margin-right:3px" title="Print Surat Jalan">SJ</button>
           <button class="btn btn-sm btn-danger" onclick="hapus('${t.id}')">Hapus</button>
         </td>
       </tr>`).join('')
@@ -1170,7 +1279,7 @@ function renderLap(){
         <td class="r" style="white-space:nowrap;font-weight:600">${fRp(t.total)}</td>
         <td class="r" style="white-space:nowrap;color:var(--green);font-weight:600">${fRp(t.margin)}</td>
         <td>${badge(t.status)}</td>
-        <td><button class="btn btn-sm" onclick="openPrint('${t.id}')">Print</button></td>
+        <td style="white-space:nowrap"><button class="btn btn-sm" onclick="openPrintInvoice('${t.id}')" style="margin-right:3px">Invoice</button><button class="btn btn-sm" onclick="openPrintSJ('${t.id}')">SJ</button></td>
       </tr>`).join('')
     : '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--txt3)">Belum ada data bulan ini</td></tr>';
 }
@@ -1241,24 +1350,48 @@ function closeModal(id){document.getElementById(id).classList.remove('show');}
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('show');}));
 
 // ===== PRINT NOTA =====
-function openPrint(id){
+let currentPrintId = '';
+let currentPrintType = '';
+
+function openPrintInvoice(id){
+  currentPrintId = id;
+  currentPrintType = 'invoice';
   const t = transaksi.find(x=>x.id===id);
   if(!t){toast('Nota tidak ditemukan','err');return;}
-  document.getElementById('print-title').textContent = 'Nota & Surat Jalan — '+t.id;
-  document.getElementById('print-content').innerHTML = buildNota(t);
+  document.getElementById('print-title').textContent = 'Invoice / Faktur — '+t.id;
+  document.getElementById('print-content').innerHTML = buildInvoice(t);
+  document.getElementById('btn-switch-print').style.display = 'inline-flex';
+  document.getElementById('btn-switch-print').textContent = 'Lihat Surat Jalan';
   document.getElementById('print-modal').classList.add('show');
 }
+
+function openPrintSJ(id){
+  currentPrintId = id;
+  currentPrintType = 'sj';
+  const t = transaksi.find(x=>x.id===id);
+  if(!t){toast('Nota tidak ditemukan','err');return;}
+  document.getElementById('print-title').textContent = 'Surat Jalan — '+t.id;
+  document.getElementById('print-content').innerHTML = buildSuratJalan(t);
+  document.getElementById('btn-switch-print').style.display = 'inline-flex';
+  document.getElementById('btn-switch-print').textContent = 'Lihat Invoice';
+  document.getElementById('print-modal').classList.add('show');
+}
+
+function switchPrintType(){
+  if(currentPrintType==='invoice') openPrintSJ(currentPrintId);
+  else openPrintInvoice(currentPrintId);
+}
+
+function openPrint(id){ openPrintInvoice(id); }
 function closePrint(){document.getElementById('print-modal').classList.remove('show');}
 document.getElementById('print-modal').addEventListener('click',function(e){if(e.target===this)closePrint();});
 
-function buildNota(t){
+function buildInvoice(t){
   const statusCls = t.status==='lunas'?'np-badge-lunas':t.status==='dp'?'np-badge-dp':'np-badge-belum';
   const statusLbl = t.status==='lunas'?'LUNAS':t.status==='dp'?'DP 50%':'BELUM BAYAR';
   const discAmt = t.sub*(t.disc/100);
   const totalFinal = t.total;
-
-  // Buat baris invoice
-  const itemRowsInv = t.items.map((it,i)=>`
+  const itemRows = t.items.map((it,i)=>`
     <tr>
       <td class="c" style="width:24px">${i+1}</td>
       <td><strong>${it.nama}</strong></td>
@@ -1268,24 +1401,9 @@ function buildNota(t){
       <td class="r" style="width:90px">Rp &nbsp;${it.harga.toLocaleString('id-ID')}</td>
       <td class="r" style="width:100px"><strong>Rp &nbsp;${Math.round(it.subtotal).toLocaleString('id-ID')}</strong></td>
     </tr>`).join('');
-
-  // Baris kosong pelengkap invoice (min 8 baris total)
-  const emptyInv = Array(Math.max(0,8-t.items.length)).fill('<tr><td colspan="7" style="height:22px">&nbsp;</td></tr>').join('');
-
-  // Baris surat jalan
-  const itemRowsSJ = t.items.map((it,i)=>`
-    <tr>
-      <td class="c" style="width:24px">${i+1}</td>
-      <td><strong>${it.nama}</strong></td>
-      <td class="c" style="width:80px">${it.ukuran||'-'}</td>
-      <td class="r" style="width:80px">${it.qty.toLocaleString('id-ID')}</td>
-      <td class="c" style="width:50px">${it.satuan||'Pcs'}</td>
-      <td style="width:100px"></td>
-    </tr>`).join('');
-  const emptySJ = Array(Math.max(0,6-t.items.length)).fill('<tr><td colspan="6" style="height:22px">&nbsp;</td></tr>').join('');
+  const emptyRows = Array(Math.max(0,10-t.items.length)).fill('<tr><td colspan="7" style="height:22px">&nbsp;</td></tr>').join('');
 
   return `<div class="np">
-    <!-- ======= FAKTUR / INVOICE ======= -->
     <div class="np-logo-area">
       <div class="np-logo-left">
         <img class="np-logo-img" src="${LOGO_B64}" alt="Sultan Plastik">
@@ -1307,29 +1425,15 @@ function buildNota(t){
         </div>
       </div>
     </div>
-
     <div style="margin-bottom:14px">
       <div class="np-nota-box">${t.id}</div>
       <span class="np-badge-status ${statusCls}" style="margin-left:8px;vertical-align:middle">${statusLbl}</span>
     </div>
-
     <div class="np-divider"></div>
-
     <table class="np-table">
-      <thead>
-        <tr>
-          <th style="width:24px;text-align:center">No</th>
-          <th>Nama Barang</th>
-          <th style="width:80px;text-align:center">Ukuran</th>
-          <th style="width:80px;text-align:right">Qty</th>
-          <th style="width:50px;text-align:center">Pcs</th>
-          <th style="width:90px;text-align:right">Harga</th>
-          <th style="width:110px;text-align:right">Jumlah</th>
-        </tr>
-      </thead>
-      <tbody>${itemRowsInv}${emptyInv}</tbody>
+      <thead><tr><th style="width:24px;text-align:center">No</th><th>Nama Barang</th><th style="width:80px;text-align:center">Ukuran</th><th style="width:80px;text-align:right">Qty</th><th style="width:50px;text-align:center">Pcs</th><th style="width:90px;text-align:right">Harga</th><th style="width:110px;text-align:right">Jumlah</th></tr></thead>
+      <tbody>${itemRows}${emptyRows}</tbody>
     </table>
-
     <div class="np-summary">
       <div class="np-sum-box">
         <div class="np-sum-row"><span>JUMLAH</span><span>Rp &nbsp;${Math.round(t.sub).toLocaleString('id-ID')}</span></div>
@@ -1339,14 +1443,11 @@ function buildNota(t){
         <div class="np-sum-row final"><span>TOTAL</span><span>Rp &nbsp;${Math.round(totalFinal).toLocaleString('id-ID')}</span></div>
       </div>
     </div>
-
     <div class="np-terbilang"><em>${terbilang(Math.round(totalFinal))}</em></div>
-
     <div class="np-footer">
       <div class="np-bank">
         <div class="np-bank-label">ACCOUNT FOR TRANSFER:</div>
-        A/N RANI ALDES SARIBANON<br>
-        0080924615 (BCA)
+        A/N RANI ALDES SARIBANON<br>0080924615 (BCA)
       </div>
       <div class="np-ttd">
         <div style="margin-bottom:4px;font-size:9px">Hormat Kami,</div>
@@ -1354,47 +1455,51 @@ function buildNota(t){
         <div style="font-weight:700;font-size:9px">SULTAN PLASTIK BANDUNG</div>
       </div>
     </div>
+  </div>`;
+}
 
-    <!-- ======= GARIS POTONG ======= -->
-    <div class="np-cut"></div>
+function buildSuratJalan(t){
+  const itemRows = t.items.map((it,i)=>`
+    <tr>
+      <td class="c" style="width:24px">${i+1}</td>
+      <td><strong>${it.nama}</strong></td>
+      <td class="c" style="width:80px">${it.ukuran||'-'}</td>
+      <td class="r" style="width:80px">${it.qty.toLocaleString('id-ID')}</td>
+      <td class="c" style="width:50px">${it.satuan||'Pcs'}</td>
+      <td style="width:100px"></td>
+    </tr>`).join('');
+  const emptyRows = Array(Math.max(0,8-t.items.length)).fill('<tr><td colspan="6" style="height:22px">&nbsp;</td></tr>').join('');
 
-    <!-- ======= SURAT JALAN ======= -->
+  return `<div class="np">
     <div class="np-logo-area" style="margin-bottom:10px">
       <div class="np-logo-left">
-        <img class="np-logo-img" src="${LOGO_B64}" alt="Sultan Plastik" style="width:36px;height:36px">
+        <img class="np-logo-img" src="${LOGO_B64}" alt="Sultan Plastik">
         <div>
-          <div class="np-sj-title">Surat Jalan</div>
-          <div class="np-company-addr">Jl. Terusan Batununggal Gg. Sukamulya No.41, Bandung Kidul 40267 &nbsp;|&nbsp; WA: 0819-4793-1800</div>
+          <div class="np-company-name">SULTAN PLASTIK BANDUNG</div>
+          <div class="np-company-tag">Polymailer &nbsp;·&nbsp; Zipper Bag &nbsp;·&nbsp; Jasa Sablon Plastik</div>
+          <div class="np-company-addr">Jl. Terusan Batununggal Gg. Sukamulya No.41 RT.2/RW.04<br>Mengger, Bandung Kidul, Kota Bandung 40267<br>WA: 0819-4793-1800 &nbsp;|&nbsp; sultanplastikbandung.id</div>
         </div>
       </div>
       <div class="np-right">
         <div class="np-date">${new Date(t.tgl).toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</div>
-        <div style="font-family:monospace;font-size:10px;color:#444;margin-top:4px">${t.id}</div>
-        <div class="np-cust-block" style="margin-top:5px">
-          <div style="font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px">ID CUSTOMER</div>
-          <div style="font-weight:700;font-size:11px">${t.custId}</div>
-          <div style="font-weight:700;font-size:12px">${t.custNama}</div>
-          ${t.custKota?`<div style="font-weight:700;font-size:10px;margin-top:1px">${t.custKota}</div>`:''}
+        <div class="np-cust-block" style="margin-top:6px">
+          <div style="font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">ID CUSTOMER</div>
+          <div style="font-weight:700;font-size:12px">${t.custId}</div>
+          <div style="font-weight:700;font-size:13px;margin-top:2px">${t.custNama}</div>
+          ${t.custAlamat?`<div style="font-size:9px;color:#555;margin-top:4px">${t.custAlamat}</div>`:''}
+          ${t.custKota?`<div style="font-weight:700;font-size:10px;margin-top:2px">${t.custKota}</div>`:''}
         </div>
       </div>
     </div>
-
+    <div style="margin-bottom:14px">
+      <div class="np-nota-box">${t.id}</div>
+      <span style="margin-left:10px;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;font-family:'Times New Roman',serif">Surat Jalan</span>
+    </div>
     <div class="np-divider"></div>
-
     <table class="np-table">
-      <thead>
-        <tr>
-          <th style="width:24px;text-align:center">No</th>
-          <th>Nama Barang</th>
-          <th style="width:80px;text-align:center">Ukuran</th>
-          <th style="width:80px;text-align:right">Qty</th>
-          <th style="width:50px;text-align:center">Pcs</th>
-          <th style="width:100px">Jumlah Coly</th>
-        </tr>
-      </thead>
-      <tbody>${itemRowsSJ}${emptySJ}</tbody>
+      <thead><tr><th style="width:24px;text-align:center">No</th><th>Nama Barang</th><th style="width:80px;text-align:center">Ukuran</th><th style="width:80px;text-align:right">Qty</th><th style="width:50px;text-align:center">Pcs</th><th style="width:100px">Jumlah Coly</th></tr></thead>
+      <tbody>${itemRows}${emptyRows}</tbody>
     </table>
-
     <div class="np-sj-footer">
       <div class="np-sj-ttd">
         <div class="np-sj-ttd-space"></div>
@@ -1412,6 +1517,154 @@ function buildNota(t){
       </div>
     </div>
   </div>`;
+}
+
+function buildNota(t){ return buildInvoice(t); }
+
+// ===== KAS =====
+let kasData = JSON.parse(localStorage.getItem('spb_kas')||'[]');
+
+function onKasTipe(){
+  const tipe = document.getElementById('kas-tipe').value;
+  const kat = document.getElementById('kas-kat');
+  if(tipe==='masuk'){
+    kat.innerHTML='<option value="Penjualan">Penjualan</option><option value="Ongkir Masuk">Ongkir Masuk</option><option value="Piutang Masuk">Piutang Masuk</option><option value="Lain-lain Masuk">Lain-lain Masuk</option>';
+  } else {
+    kat.innerHTML='<option value="Beli Bahan">Beli Bahan / Stok</option><option value="Gaji">Gaji Karyawan</option><option value="Ongkir Keluar">Ongkir / Pengiriman</option><option value="Operasional">Operasional (listrik, dll)</option><option value="Perlengkapan">Perlengkapan</option><option value="Lain-lain Keluar">Lain-lain Keluar</option>';
+  }
+}
+
+function simpanKas(){
+  const tgl = document.getElementById('kas-tgl').value;
+  const tipe = document.getElementById('kas-tipe').value;
+  const kat = document.getElementById('kas-kat').value;
+  const nominal = parseFloat(document.getElementById('kas-nominal').value)||0;
+  const ket = document.getElementById('kas-ket').value.trim();
+  if(!tgl){toast('Pilih tanggal dulu!','err');return;}
+  if(!nominal){toast('Isi nominal!','err');return;}
+  const entry = {
+    id: 'KAS-'+Date.now(),
+    ts: Date.now(),
+    tgl, tipe, kat, nominal, ket
+  };
+  kasData.unshift(entry);
+  localStorage.setItem('spb_kas', JSON.stringify(kasData));
+  // Firebase
+  if(db){
+    try{ db.collection('kas').doc(entry.id).set(entry); }catch(e){}
+  }
+  toast((tipe==='masuk'?'Kas masuk':'Kas keluar')+' Rp '+nominal.toLocaleString('id-ID')+' tersimpan!','ok');
+  resetKas();
+  renderKas();
+}
+
+function resetKas(){
+  document.getElementById('kas-tgl').value = new Date().toISOString().split('T')[0];
+  document.getElementById('kas-tipe').value = 'masuk';
+  onKasTipe();
+  document.getElementById('kas-nominal').value = '';
+  document.getElementById('kas-ket').value = '';
+}
+
+function hapusKas(id){
+  if(!confirm('Hapus entri kas ini?'))return;
+  kasData = kasData.filter(k=>k.id!==id);
+  localStorage.setItem('spb_kas', JSON.stringify(kasData));
+  if(db){ try{ db.collection('kas').doc(id).delete(); }catch(e){} }
+  renderKas();
+  toast('Kas dihapus');
+}
+
+function renderKas(){
+  const today = new Date().toISOString().split('T')[0];
+  const todayData = kasData.filter(k=>k.tgl===today);
+  document.getElementById('tbl-kas').innerHTML = todayData.length
+    ? todayData.map(k=>`<tr>
+        <td style="white-space:nowrap">${k.tgl}</td>
+        <td><span class="badge ${k.tipe==='masuk'?'bl':'bb'}">${k.tipe==='masuk'?'Masuk':'Keluar'}</span></td>
+        <td>${k.kat}</td>
+        <td class="trunc">${k.ket||'-'}</td>
+        <td class="r" style="font-weight:700;color:${k.tipe==='masuk'?'var(--green)':'var(--red)'}">${k.tipe==='masuk'?'+':'-'} ${fRp(k.nominal)}</td>
+        <td><button class="btn btn-sm btn-danger" onclick="hapusKas('${k.id}')">Hapus</button></td>
+      </tr>`).join('')
+    : '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--txt3)">Belum ada data kas hari ini</td></tr>';
+}
+
+// ===== LAPORAN KEUANGAN =====
+function renderLapKas(){
+  const sel = document.getElementById('lapkas-bln').value.split('-');
+  const m = parseInt(sel[0])-1, y = parseInt(sel[1]);
+  
+  // Kas data bulan ini
+  const kasBlnIni = kasData.filter(k=>{const d=new Date(k.tgl);return d.getMonth()===m&&d.getFullYear()===y;});
+  const kasMasuk = kasBlnIni.filter(k=>k.tipe==='masuk');
+  const kasKeluar = kasBlnIni.filter(k=>k.tipe==='keluar');
+  const totalMasuk = kasMasuk.reduce((s,k)=>s+k.nominal,0);
+  const totalKeluar = kasKeluar.reduce((s,k)=>s+k.nominal,0);
+  
+  // Transaksi data bulan ini
+  const trxBln = transaksi.filter(t=>{const d=new Date(t.ts);return d.getMonth()===m&&d.getFullYear()===y;});
+  const omzet = trxBln.reduce((s,t)=>s+t.total,0);
+  const hpp = trxBln.reduce((s,t)=>s+t.hppTotal,0);
+  
+  // Profit = Omzet - HPP - Pengeluaran Kas
+  const profit = omzet - hpp - totalKeluar;
+  const profitPct = omzet>0 ? Math.round(profit/omzet*100) : 0;
+  
+  document.getElementById('lk-omz').textContent = fRp(omzet);
+  document.getElementById('lk-hpp').textContent = fRp(hpp);
+  document.getElementById('lk-keluar').textContent = fRp(totalKeluar);
+  document.getElementById('lk-profit').textContent = fRp(profit);
+  document.getElementById('lk-profit').style.color = profit>=0 ? 'var(--green)' : 'var(--red)';
+  document.getElementById('lk-profit-pct').textContent = 'Margin: '+profitPct+'%';
+  
+  // Masuk by category
+  const masukByCat = {};
+  kasMasuk.forEach(k=>{if(!masukByCat[k.kat])masukByCat[k.kat]=0;masukByCat[k.kat]+=k.nominal;});
+  const masukEntries = Object.entries(masukByCat).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('lk-masuk-detail').innerHTML = masukEntries.length
+    ? masukEntries.map(([k,v])=>`<div class="top-item"><div class="top-name">${k}</div><div class="top-val" style="color:var(--green)">${fRp(v)}</div></div>`).join('')
+    : '<div style="text-align:center;padding:12px;color:var(--txt3);font-size:12px">Belum ada kas masuk</div>';
+  document.getElementById('lk-masuk-total').textContent = fRp(totalMasuk);
+  
+  // Keluar by category
+  const keluarByCat = {};
+  kasKeluar.forEach(k=>{if(!keluarByCat[k.kat])keluarByCat[k.kat]=0;keluarByCat[k.kat]+=k.nominal;});
+  const keluarEntries = Object.entries(keluarByCat).sort((a,b)=>b[1]-a[1]);
+  document.getElementById('lk-keluar-detail').innerHTML = keluarEntries.length
+    ? keluarEntries.map(([k,v])=>`<div class="top-item"><div class="top-name">${k}</div><div class="top-val" style="color:var(--red)">${fRp(v)}</div></div>`).join('')
+    : '<div style="text-align:center;padding:12px;color:var(--txt3);font-size:12px">Belum ada kas keluar</div>';
+  document.getElementById('lk-keluar-total').textContent = fRp(totalKeluar);
+  
+  // Detail table with running saldo
+  let saldo = 0;
+  const sorted = [...kasBlnIni].sort((a,b)=>new Date(a.tgl)-new Date(b.tgl));
+  document.getElementById('lk-table').innerHTML = sorted.length
+    ? sorted.map(k=>{
+        saldo += k.tipe==='masuk' ? k.nominal : -k.nominal;
+        return `<tr>
+          <td style="white-space:nowrap">${k.tgl}</td>
+          <td><span class="badge ${k.tipe==='masuk'?'bl':'bb'}">${k.tipe==='masuk'?'Masuk':'Keluar'}</span></td>
+          <td>${k.kat}</td>
+          <td class="trunc">${k.ket||'-'}</td>
+          <td class="r" style="color:var(--green)">${k.tipe==='masuk'?fRp(k.nominal):'-'}</td>
+          <td class="r" style="color:var(--red)">${k.tipe==='keluar'?fRp(k.nominal):'-'}</td>
+          <td class="r" style="font-weight:700;color:${saldo>=0?'var(--green)':'var(--red)'}">${fRp(saldo)}</td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--txt3)">Belum ada data kas bulan ini</td></tr>';
+}
+
+function exportKasCSV(){
+  const sel = document.getElementById('lapkas-bln').value.split('-');
+  const m=parseInt(sel[0])-1,y=parseInt(sel[1]);
+  const data = kasData.filter(k=>{const d=new Date(k.tgl);return d.getMonth()===m&&d.getFullYear()===y;});
+  if(!data.length){toast('Tidak ada data','err');return;}
+  const rows=[['Tanggal','Tipe','Kategori','Keterangan','Masuk','Keluar'],...data.map(k=>[k.tgl,k.tipe,k.kat,k.ket,k.tipe==='masuk'?k.nominal:'',k.tipe==='keluar'?k.nominal:''])];
+  const csv=rows.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const b=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`sultan-plastik-kas-${sel[1]}-${sel[0].padStart(2,'0')}.csv`;a.click();
+  toast('Export kas berhasil!');
 }
 
 // ===== RENDER ALL =====
