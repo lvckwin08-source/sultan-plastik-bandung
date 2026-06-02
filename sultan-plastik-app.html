@@ -372,7 +372,7 @@ tbody tr:hover td{background:#F9F8F4}
           <div class="card">
             <div class="card-title">Nota Terbaru</div>
             <div class="tw"><table>
-              <thead><tr><th>Nota</th><th>Customer</th><th>Items</th><th class="r">Total</th><th>Status</th></tr></thead>
+              <thead><tr><th>Nota</th><th>Customer</th><th class="r">Total</th><th>Status</th></tr></thead>
               <tbody id="d-recent"><tr><td colspan="5" style="text-align:center;padding:24px;color:var(--txt3)">Belum ada transaksi</td></tr></tbody>
             </table></div>
           </div>
@@ -1213,20 +1213,34 @@ function renderDashboard(){
   const omz = bln.reduce((s,t)=>s+t.total,0);
   const mrg = bln.reduce((s,t)=>s+t.margin,0);
   const pct = omz>0?Math.round(mrg/omz*100):0;
-  const custs = new Set(transaksi.map(t=>t.custId)).size;
+  const custs = new Set(bln.map(t=>t.custId)).size;
+  
+  // Lunas vs Piutang
+  const lunasNota = bln.filter(t=>t.status==='lunas');
+  const dpNota = bln.filter(t=>t.status==='dp');
+  const belumNota = bln.filter(t=>t.status==='belum');
+  const totalLunas = lunasNota.reduce((s,t)=>s+t.total,0);
+  const totalDP = dpNota.reduce((s,t)=>s+t.total,0);
+  const totalBelum = belumNota.reduce((s,t)=>s+t.total,0);
+  const totalPiutang = totalDP + totalBelum;
+  
   document.getElementById('d-trx').textContent = bln.length;
-  document.getElementById('d-trx-all').textContent = transaksi.length;
+  document.getElementById('d-cust').textContent = custs;
   document.getElementById('d-omz').textContent = fRpShort(omz);
   document.getElementById('d-pct').textContent = pct+'%';
   document.getElementById('d-mrg').textContent = fRpShort(mrg);
-  document.getElementById('d-cust').textContent = custs;
+  document.getElementById('d-lunas').textContent = fRpShort(totalLunas);
+  document.getElementById('d-lunas-count').textContent = lunasNota.length;
+  document.getElementById('d-piutang').textContent = fRpShort(totalPiutang);
+  document.getElementById('d-piutang-dp').textContent = dpNota.length;
+  document.getElementById('d-piutang-belum').textContent = belumNota.length;
   document.getElementById('d-recent').innerHTML = transaksi.slice(0,6).map(t=>`
     <tr>
       <td class="mono">${t.id}</td>
       <td class="trunc">${t.custNama}</td>
       <td class="c">${t.items.length} item</td>
       <td class="r" style="white-space:nowrap;font-weight:600">${fRp(t.total)}</td>
-      <td>${badge(t.status)}</td>
+      <td><span onclick="cycleStatus('${t.id}')" style="cursor:pointer" title="Klik untuk ubah status">${badge(t.status)}</span></td>
     </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--txt3)">Belum ada transaksi</td></tr>';
   const cm={};bln.forEach(t=>{if(!cm[t.custNama])cm[t.custNama]=0;cm[t.custNama]+=t.total;});
   const top = Object.entries(cm).sort((a,b)=>b[1]-a[1]).slice(0,5);
@@ -1260,7 +1274,7 @@ function renderRiwayat(){
         <td class="c">${t.items.length}</td>
         <td class="r" style="white-space:nowrap;font-weight:600">${fRp(t.total)}</td>
         <td class="r" style="white-space:nowrap;color:var(--green);font-weight:600">${fRp(t.margin)}</td>
-        <td>${badge(t.status)}</td>
+        <td><span onclick="cycleStatus('${t.id}')" style="cursor:pointer" title="Klik untuk ubah status">${badge(t.status)}</span></td>
         <td style="white-space:nowrap">
           <button class="btn btn-sm" onclick="openPrintInvoice('${t.id}')" style="margin-right:3px" title="Print Invoice">Invoice</button>
           <button class="btn btn-sm" onclick="openPrintSJ('${t.id}')" style="margin-right:3px" title="Print Surat Jalan">SJ</button>
@@ -1342,7 +1356,7 @@ function renderLap(){
         <td class="c">${t.items.length}</td>
         <td class="r" style="white-space:nowrap;font-weight:600">${fRp(t.total)}</td>
         <td class="r" style="white-space:nowrap;color:var(--green);font-weight:600">${fRp(t.margin)}</td>
-        <td>${badge(t.status)}</td>
+        <td><span onclick="cycleStatus('${t.id}')" style="cursor:pointer" title="Klik untuk ubah status">${badge(t.status)}</span></td>
         <td style="white-space:nowrap"><button class="btn btn-sm" onclick="openPrintInvoice('${t.id}')" style="margin-right:3px">Invoice</button><button class="btn btn-sm" onclick="openPrintSJ('${t.id}')">SJ</button></td>
       </tr>`).join('')
     : '<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--txt3)">Belum ada data bulan ini</td></tr>';
@@ -1762,6 +1776,21 @@ function exportKasCSV(){
   const b=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=`sultan-plastik-kas-${sel[1]}-${sel[0].padStart(2,'0')}.csv`;a.click();
   toast('Export kas berhasil!');
+}
+
+// ===== QUICK STATUS CHANGE =====
+function cycleStatus(id){
+  const t = transaksi.find(x=>x.id===id);
+  if(!t) return;
+  // Cycle: belum → dp → lunas → belum
+  if(t.status==='belum') t.status='dp';
+  else if(t.status==='dp') t.status='lunas';
+  else t.status='belum';
+  save();
+  fbSaveNota(t);
+  renderAll();
+  const labels = {lunas:'Lunas',dp:'DP',belum:'Belum Bayar'};
+  toast('Status '+t.id+' → '+labels[t.status],'ok');
 }
 
 // ===== EDIT NOTA =====
