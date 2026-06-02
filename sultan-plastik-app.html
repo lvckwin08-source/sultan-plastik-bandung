@@ -24,6 +24,8 @@ button,input,select,textarea{font-family:inherit}
 ::-webkit-scrollbar{width:5px;height:5px}
 /* Admin mode: hide financial data */
 body.admin-mode .owner-only{display:none!important}
+/* Owner mode: hide admin-only elements */
+body.owner-mode .admin-only{display:none!important}
 ::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:9px}
 
 /* LOGIN */
@@ -949,27 +951,50 @@ function doLogin(){
   
   currentRole = selRoleVal;
   document.body.classList.toggle('admin-mode', currentRole==='admin');
+  document.body.classList.toggle('owner-mode', currentRole==='owner');
   document.getElementById('login').style.display = 'none';
   document.getElementById('role-disp').textContent = currentRole==='owner'?'Owner':'Admin';
   
   // Role-based access
-  const lapSec = document.getElementById('lap-sec');
-  const niLap = document.getElementById('ni-lap');
   const niDash = document.querySelector('[data-page="dashboard"]');
+  const niTrx = document.querySelector('[data-page="transaksi"]');
   const niRiwayat = document.querySelector('[data-page="riwayat"]');
+  const niProduk = document.querySelector('[data-page="produk"]');
+  const niCust = document.querySelector('[data-page="customer"]');
+  const niKas = document.querySelector('[data-page="kas"]');
+  const niLapKas = document.getElementById('ni-lapkas');
+  const niLap = document.getElementById('ni-lap');
+  const lapSec = document.getElementById('lap-sec');
+  const kasSec = document.getElementById('kas-sec');
   
   if(currentRole==='owner'){
-    lapSec.style.display = '';
-    niLap.style.display = '';
+    // Owner: Dashboard, Riwayat (view+print), Laporan, Laporan Keuangan
     niDash.style.display = '';
+    niTrx.style.display = 'none';       // Owner gak input
     niRiwayat.style.display = '';
+    niProduk.style.display = 'none';     // Owner gak perlu
+    niCust.style.display = 'none';       // Owner gak perlu
+    niKas.style.display = 'none';        // Owner gak input kas
+    niLapKas.style.display = '';
+    niLap.style.display = '';
+    lapSec.style.display = '';
+    kasSec.style.display = '';
+    // hide Database section header for owner
+    document.querySelectorAll('.sb-sec').forEach(s => {
+      if(s.textContent.trim()==='Database') s.style.display = 'none';
+    });
   } else {
-    // Admin: hide laporan, dashboard, riwayat omzet columns
-    lapSec.style.display = 'none';
-    niLap.style.display = 'none';
+    // Admin: Input Transaksi, Riwayat (edit), Katalog Produk, Database Customer, Input Kas
     niDash.style.display = 'none';
-    // niRiwayat visible for admin too
-    document.getElementById('ni-lapkas').style.display = 'none';
+    niTrx.style.display = '';
+    niRiwayat.style.display = '';
+    niProduk.style.display = '';
+    niCust.style.display = '';
+    niKas.style.display = '';
+    niLapKas.style.display = 'none';     // Admin gak lihat laporan keuangan
+    niLap.style.display = 'none';        // Admin gak lihat laporan bulanan
+    lapSec.style.display = 'none';
+    kasSec.style.display = '';
     // Go straight to transaksi page
     setTimeout(function(){ gp('transaksi', document.querySelector('[data-page="transaksi"]')); }, 100);
   }
