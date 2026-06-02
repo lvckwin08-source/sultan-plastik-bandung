@@ -258,6 +258,8 @@ tbody tr:hover td{background:#F9F8F4}
   @page{size:A4;margin:8mm}
 }
 </style>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script defer src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -791,35 +793,44 @@ async function syncToCloud(){
 }
 
 function loadFirebase() {
-  const s1 = document.createElement('script');
-  s1.src = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js';
-  s1.onload = function() {
-    const s2 = document.createElement('script');
-    s2.src = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js';
-    s2.onload = function() {
-      try {
-        firebase.initializeApp({
-          apiKey: "AIzaSyAY22rAH4ict7TMv3pkQ1ehoZSKcySTuYo",
-          authDomain: "sultan-plastik-app.firebaseapp.com",
-          projectId: "sultan-plastik-app",
-          storageBucket: "sultan-plastik-app.firebasestorage.app",
-          messagingSenderId: "254971941248",
-          appId: "1:254971941248:web:908d417227a5aa2a60b165"
-        });
+  function tryInit(){
+    if(typeof firebase === 'undefined'){
+      setTimeout(tryInit, 200);
+      return;
+    }
+    try {
+      firebase.initializeApp({
+        apiKey: "AIzaSyAY22rAH4ict7TMv3pkQ1ehoZSKcySTuYo",
+        authDomain: "sultan-plastik-app.firebaseapp.com",
+        projectId: "sultan-plastik-app",
+        storageBucket: "sultan-plastik-app.firebasestorage.app",
+        messagingSenderId: "254971941248",
+        appId: "1:254971941248:web:908d417227a5aa2a60b165"
+      });
+      db = firebase.firestore();
+      console.log('Firebase connected!');
+      document.getElementById('fb-status').textContent='Online ✓';
+      document.getElementById('fb-status').style.background='#EAF3DE';
+      document.getElementById('fb-status').style.color='#1B5E3B';
+      document.getElementById('btn-sync').style.display='inline-flex';
+      startFirebaseSync();
+    } catch(e) {
+      if(e.code==='app/duplicate-app'){
         db = firebase.firestore();
-        console.log('Firebase connected!');
         document.getElementById('fb-status').textContent='Online ✓';
         document.getElementById('fb-status').style.background='#EAF3DE';
         document.getElementById('fb-status').style.color='#1B5E3B';
         document.getElementById('btn-sync').style.display='inline-flex';
         startFirebaseSync();
-      } catch(e) { console.warn('Firebase init failed:', e); document.getElementById('fb-status').textContent='Offline'; document.getElementById('fb-status').style.background='#FCEBEB'; document.getElementById('fb-status').style.color='#B71C1C'; }
-    };
-    s2.onerror = function() { console.warn('Firestore SDK failed to load'); };
-    document.head.appendChild(s2);
-  };
-  s1.onerror = function() { console.warn('Firebase SDK failed to load'); document.getElementById('fb-status').textContent='Offline'; document.getElementById('fb-status').style.background='#FCEBEB'; document.getElementById('fb-status').style.color='#B71C1C'; };
-  document.head.appendChild(s1);
+      } else {
+        console.warn('Firebase init failed:', e);
+        document.getElementById('fb-status').textContent='Offline';
+        document.getElementById('fb-status').style.background='#FCEBEB';
+        document.getElementById('fb-status').style.color='#B71C1C';
+      }
+    }
+  }
+  tryInit();
 }
 
 // ===== STATE =====
