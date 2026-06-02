@@ -355,7 +355,10 @@ tbody tr:hover td{background:#F9F8F4}
       <div class="tb-right">
         <div id="tb-date"></div>
         <div id="tb-info" style="margin-top:2px"></div>
-        <div id="fb-status" style="margin-top:3px;font-size:10px;padding:2px 8px;border-radius:99px;background:#FAEEDA;color:#7A5C10">Connecting...</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+          <div id="fb-status" style="font-size:10px;padding:2px 8px;border-radius:99px;background:#FAEEDA;color:#7A5C10">Connecting...</div>
+          <button onclick="syncToCloud()" class="btn btn-sm" id="btn-sync" style="font-size:10px;padding:2px 8px;display:none">↑ Sync ke Cloud</button>
+        </div>
       </div>
     </div>
     <div class="content">
@@ -744,6 +747,49 @@ const CUST_SEED=[{"i": "SP-0001", "n": "KANG DASEP", "k": "Bandung", "a": "", "p
 
 // ===== FIREBASE (DYNAMIC LOAD) =====
 let db = null;
+async function syncToCloud(){
+  if(!db){toast('Firebase belum connected','err');return;}
+  const btn = document.getElementById('btn-sync');
+  btn.textContent = 'Syncing...';
+  btn.disabled = true;
+  let count = 0;
+  
+  // Sync transaksi
+  for(const t of transaksi){
+    try{
+      await db.collection('transaksi').doc(t.id.replace(/\//g,'_')).set(t);
+      count++;
+    }catch(e){console.error('Sync error:',e);}
+  }
+  
+  // Sync kas
+  for(const k of kasData){
+    try{
+      await db.collection('kas').doc(k.id).set(k);
+    }catch(e){}
+  }
+  
+  // Sync custom produk
+  const cp = JSON.parse(localStorage.getItem('spb_produk')||'[]');
+  const customProduk = cp.filter(p => !PRODUK_SEED.find(s=>s.k===p.k));
+  for(const p of customProduk){
+    try{ await db.collection('produk_custom').doc(p.k).set(p); }catch(e){}
+  }
+  
+  // Sync custom customer
+  const cc = JSON.parse(localStorage.getItem('spb_cust')||'[]');
+  const customCust = cc.filter(c => !CUST_SEED.find(s=>s.i===c.i));
+  for(const c of customCust){
+    try{ await db.collection('customer_custom').doc(c.i).set(c); }catch(e){}
+  }
+  
+  btn.textContent = '✓ Synced!';
+  btn.style.background = '#EAF3DE';
+  btn.style.color = '#1B5E3B';
+  toast(count+' transaksi + kas berhasil di-sync ke cloud!','ok');
+  setTimeout(()=>{ btn.textContent = '↑ Sync ke Cloud'; btn.disabled = false; btn.style.background=''; btn.style.color=''; }, 3000);
+}
+
 function loadFirebase() {
   const s1 = document.createElement('script');
   s1.src = 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js';
@@ -765,6 +811,7 @@ function loadFirebase() {
         document.getElementById('fb-status').textContent='Online ✓';
         document.getElementById('fb-status').style.background='#EAF3DE';
         document.getElementById('fb-status').style.color='#1B5E3B';
+        document.getElementById('btn-sync').style.display='inline-flex';
         startFirebaseSync();
       } catch(e) { console.warn('Firebase init failed:', e); document.getElementById('fb-status').textContent='Offline'; document.getElementById('fb-status').style.background='#FCEBEB'; document.getElementById('fb-status').style.color='#B71C1C'; }
     };
