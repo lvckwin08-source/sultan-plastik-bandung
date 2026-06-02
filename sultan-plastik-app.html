@@ -885,10 +885,34 @@ async function fbSaveCustomer(c) {
 // Real-time listener for transaksi
 function startFirebaseSync() {
   if(!db) { console.warn('Firebase offline, using localStorage'); return; }
-  // Listen to transaksi
+  
+  // FIRST: push local data to Firebase (one-time sync)
+  const localTrx = JSON.parse(localStorage.getItem('spb_trx')||'[]');
+  if(localTrx.length > 0){
+    console.log('Syncing '+localTrx.length+' local transactions to Firebase...');
+    localTrx.forEach(t => {
+      try{ db.collection('transaksi').doc(t.id.replace(/\//g,'_')).set(t, {merge:true}); }catch(e){}
+    });
+  }
+  const localKas = JSON.parse(localStorage.getItem('spb_kas')||'[]');
+  if(localKas.length > 0){
+    localKas.forEach(k => {
+      try{ db.collection('kas').doc(k.id).set(k, {merge:true}); }catch(e){}
+    });
+  }
+  
+  // THEN: listen for changes (merge, don't replace)
   db.collection('transaksi').orderBy('ts','desc').onSnapshot(snapshot => {
-    transaksi = [];
-    snapshot.forEach(doc => transaksi.push(doc.data()));
+    // Merge: keep local + add from Firebase
+    const fbData = [];
+    snapshot.forEach(doc => fbData.push(doc.data()));
+    
+    // Merge by ID - Firebase wins if exists in both
+    const merged = {};
+    transaksi.forEach(t => merged[t.id] = t);
+    fbData.forEach(t => merged[t.id] = t);
+    transaksi = Object.values(merged).sort((a,b) => b.ts - a.ts);
+    
     // Update nota counter
     if(transaksi.length > 0) {
       const maxNum = transaksi.reduce((max, t) => {
@@ -896,8 +920,9 @@ function startFirebaseSync() {
         const num = parseInt(parts[parts.length-1]) || 0;
         return num > max ? num : max;
       }, 0);
-      if(maxNum >= notaNum) { notaNum = maxNum + 1; save(); }
+      if(maxNum >= notaNum) { notaNum = maxNum + 1; }
     }
+    save();
     firebaseReady = true;
     refreshNotaBadge();
     renderAll();
@@ -924,13 +949,17 @@ function startFirebaseSync() {
     }
   });
 
-  // Listen to kas
+  // Listen to kas - merge approach
   db.collection('kas').orderBy('ts','desc').onSnapshot(snapshot => {
-    kasData = [];
-    snapshot.forEach(doc => kasData.push(doc.data()));
+    const fbKas = [];
+    snapshot.forEach(doc => fbKas.push(doc.data()));
+    const mergedKas = {};
+    kasData.forEach(k => mergedKas[k.id] = k);
+    fbKas.forEach(k => mergedKas[k.id] = k);
+    kasData = Object.values(mergedKas).sort((a,b) => b.ts - a.ts);
     localStorage.setItem('spb_kas', JSON.stringify(kasData));
     renderKas();
-    if(document.getElementById('page-lapkas').classList.contains('active')) renderLapKas();
+    if(document.getElementById('page-lapkas') && document.getElementById('page-lapkas').classList.contains('active')) renderLapKas();
   }, err => { console.error('Kas sync error:', err); });
 
   // Listen to custom customer
