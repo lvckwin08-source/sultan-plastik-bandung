@@ -925,6 +925,74 @@ async function pullFromFirebase(){
 }
 
 async function startFirebaseSync() {
+  // Try Firebase SDK first (jsdelivr CDN)
+  try {
+    if(typeof firebase !== 'undefined'){
+      if(!firebase.apps.length){
+        firebase.initializeApp({
+          apiKey: "AIzaSyAY22rAH4ict7TMv3pkQ1ehoZSKcySTuYo",
+          authDomain: "sultan-plastik-app.firebaseapp.com",
+          projectId: "sultan-plastik-app",
+          storageBucket: "sultan-plastik-app.firebasestorage.app",
+          messagingSenderId: "254971941248",
+          appId: "1:254971941248:web:908d417227a5aa2a60b165"
+        });
+      }
+      const fsdb = firebase.firestore();
+      // Test connection with a simple read
+      await fsdb.collection('_test').doc('ping').set({t:Date.now()});
+      // SDK works! Use real-time listeners
+      fbOnline = true;
+      document.getElementById('fb-status').textContent = 'Online ✓ (realtime)';
+      document.getElementById('fb-status').style.background = '#EAF3DE';
+      document.getElementById('fb-status').style.color = '#1B5E3B';
+      var syncBtn = document.getElementById('btn-sync');
+      if(syncBtn) syncBtn.style.display = 'inline-flex';
+      
+      // Override fb functions with SDK versions
+      window.fbSaveNota = async function(nota){
+        try{ await fsdb.collection('transaksi').doc(nota.id.replace(/\//g,'_')).set(nota); }catch(e){}
+      };
+      window.fbDeleteNota = async function(id){
+        try{ await fsdb.collection('transaksi').doc(id.replace(/\//g,'_')).delete(); }catch(e){}
+      };
+      window.fbSaveKas = async function(entry){
+        try{ await fsdb.collection('kas').doc(entry.id).set(entry); }catch(e){}
+      };
+      window.fbDeleteKas = async function(id){
+        try{ await fsdb.collection('kas').doc(id).delete(); }catch(e){}
+      };
+      
+      // Real-time listener for transaksi
+      fsdb.collection('transaksi').onSnapshot(snap => {
+        const fbData = [];
+        snap.forEach(doc => fbData.push(doc.data()));
+        const merged = {};
+        transaksi.forEach(t => merged[t.id] = t);
+        fbData.forEach(t => { if(t.id) merged[t.id] = t; });
+        transaksi = Object.values(merged).sort((a,b) => (b.ts||0) - (a.ts||0));
+        save(); refreshNotaBadge(); renderAll();
+      });
+      
+      // Real-time listener for kas
+      fsdb.collection('kas').onSnapshot(snap => {
+        const fbKas = [];
+        snap.forEach(doc => fbKas.push(doc.data()));
+        const mergedKas = {};
+        kasData.forEach(k => mergedKas[k.id] = k);
+        fbKas.forEach(k => { if(k.id) mergedKas[k.id] = k; });
+        kasData = Object.values(mergedKas).sort((a,b) => (b.ts||0) - (a.ts||0));
+        localStorage.setItem('spb_kas', JSON.stringify(kasData));
+      });
+      
+      console.log('Firebase SDK connected via jsdelivr!');
+      return; // SDK works, skip REST
+    }
+  } catch(sdkErr){
+    console.warn('Firebase SDK failed, trying REST:', sdkErr);
+  }
+  
+  // Fallback: REST API
   try {
     const test = await fetch(FB_BASE+'?key='+FB_KEY);
     if(test.ok){
@@ -932,8 +1000,8 @@ async function startFirebaseSync() {
       document.getElementById('fb-status').textContent = 'Online ✓';
       document.getElementById('fb-status').style.background = '#EAF3DE';
       document.getElementById('fb-status').style.color = '#1B5E3B';
-      var syncBtn = document.getElementById('btn-sync');
-      if(syncBtn) syncBtn.style.display = 'inline-flex';
+      var syncBtn2 = document.getElementById('btn-sync');
+      if(syncBtn2) syncBtn2.style.display = 'inline-flex';
     } else { throw new Error('HTTP '+test.status); }
   } catch(e){
     document.getElementById('fb-status').textContent = 'Offline (lokal)';
@@ -1914,4 +1982,6 @@ function editNota(id){
 function renderAll(){renderDashboard();renderRiwayat();}
 </script>
 </body>
-</html>
+</html><script src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/compat/firebase-app-compat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/compat/firebase-firestore-compat.min.js"></script>
+
