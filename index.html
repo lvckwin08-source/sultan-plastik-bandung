@@ -24,11 +24,28 @@
 .hero-bullets li { display: flex; align-items: flex-start; gap: 14px; font-size: 15px; font-weight: 500; }
 .hero-bullets li::before { content: '→'; color: var(--amber-dark); font-weight: 700; font-family: var(--font-mono); }
 .hero-cta { display: flex; gap: 16px; flex-wrap: wrap; }
-.hero-image-box { background: var(--ink); aspect-ratio: 4/5; position: relative; overflow: hidden; border: 2px solid var(--ink); }
-.hero-image-placeholder { width: 100%; height: 100%; background: repeating-linear-gradient(45deg, #2a2a2a 0, #2a2a2a 2px, transparent 2px, transparent 24px), var(--ink); display: flex; align-items: center; justify-content: center; flex-direction: column; color: var(--amber); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; text-align: center; padding: 24px; position: relative; }
-.hero-image-placeholder::before { content: ''; position: absolute; inset: 16px; border: 1px solid rgba(212,160,23,0.3); }
-.hero-image-placeholder .label { background: var(--amber); color: var(--ink); padding: 8px 16px; font-weight: 700; margin-bottom: 12px; }
+.hero-image-box { background: var(--ink); aspect-ratio: 9/16; position: relative; overflow: hidden; border: 2px solid var(--ink); max-width: 360px; margin-left: auto; }
+.hero-video { width: 100%; height: 100%; object-fit: cover; display: block; }
 .hero-image-tag { position: absolute; bottom: 16px; left: 16px; right: 16px; z-index: 2; background: var(--amber); padding: 12px 16px; color: var(--ink); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; display: flex; justify-content: space-between; font-weight: 700; }
+/* Carousel */
+.carousel { position: relative; overflow: hidden; }
+.carousel-track { display: flex; transition: transform 0.4s ease; }
+.carousel-track img, .carousel-track video { width: 100%; flex-shrink: 0; object-fit: cover; display: block; }
+.carousel-track img { aspect-ratio: 4/3; }
+.carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: var(--ink); color: var(--amber); border: none; width: 36px; height: 36px; font-size: 16px; cursor: pointer; z-index: 3; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-weight: 700; }
+.carousel-btn.prev { left: 8px; }
+.carousel-btn.next { right: 8px; }
+.carousel-dots { display: flex; gap: 6px; justify-content: center; padding: 10px 0 0; }
+.carousel-dot { width: 6px; height: 6px; background: var(--line-soft); border-radius: 50%; cursor: pointer; transition: background 0.2s; border: none; }
+.carousel-dot.active { background: var(--amber-dark); }
+/* Portfolio grid carousel */
+.porto-carousel { position: relative; }
+.porto-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+.porto-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; cursor: pointer; transition: opacity 0.2s; }
+.porto-grid img:hover { opacity: 0.85; }
+.porto-nav { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
+.porto-nav button { background: transparent; border: 2px solid var(--base); color: var(--base); padding: 8px 20px; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.1em; cursor: pointer; text-transform: uppercase; transition: all 0.2s; }
+.porto-nav button:hover { background: var(--amber); border-color: var(--amber); color: var(--ink); }
 .trust-strip { background: var(--ink); color: var(--base); padding: 24px 0; overflow: hidden; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); }
 .trust-label { font-family: var(--font-mono); font-size: 11px; color: var(--amber); letter-spacing: 0.18em; text-transform: uppercase; padding: 0 32px; margin-bottom: 16px; max-width: 1280px; margin-left: auto; margin-right: auto; }
 .marquee { display: flex; gap: 64px; animation: scroll 30s linear infinite; white-space: nowrap; }
@@ -124,10 +141,9 @@
                 </div>
             </div>
             <div class="hero-image-box">
-                <div class="hero-image-placeholder">
-                    <div class="label">FOTO HERO</div>
-                    Meja sablon manual jalan<br>+<br>Stack polymailer PUTIH LW
-                </div>
+                <video class="hero-video" autoplay muted loop playsinline>
+                    <source src="asset/Hero/hero-video.mp4" type="video/mp4">
+                </video>
                 <div class="hero-image-tag"><span>PUTIH LW · 0.6μ</span><span>SIGNATURE</span></div>
             </div>
         </div>
@@ -192,7 +208,24 @@
             <a href="polymailer.html" style="text-decoration: none; color: inherit;">
                 <div class="service-card">
                     <div class="service-tag amber"><span>01 — SIGNATURE</span><span>★</span></div>
-                    <div class="service-image">PUTIH LW PRODUCT SHOT</div>
+                    <div class="carousel service-image" id="carousel-putih" style="aspect-ratio:4/3; background:var(--ink);">
+                        <div class="carousel-track" id="track-putih">
+                            <img src="asset/foto putih LW/service-putih-lw-01.jpeg" alt="Putih LW 01">
+                            <img src="asset/foto putih LW/service-putih-lw-02.jpeg" alt="Putih LW 02">
+                            <img src="asset/foto putih LW/service-putih-lw-03.jpeg" alt="Putih LW 03">
+                            <img src="asset/foto putih LW/service-putih-lw-04.jpeg" alt="Putih LW 04">
+                            <img src="asset/foto putih LW/service-putih-lw-05.jpeg" alt="Putih LW 05">
+                        </div>
+                        <button class="carousel-btn prev" onclick="moveCarousel('putih',-1,5,event)">‹</button>
+                        <button class="carousel-btn next" onclick="moveCarousel('putih',1,5,event)">›</button>
+                        <div class="carousel-dots" id="dots-putih">
+                            <button class="carousel-dot active" onclick="goToSlide('putih',0,5,event)"></button>
+                            <button class="carousel-dot" onclick="goToSlide('putih',1,5,event)"></button>
+                            <button class="carousel-dot" onclick="goToSlide('putih',2,5,event)"></button>
+                            <button class="carousel-dot" onclick="goToSlide('putih',3,5,event)"></button>
+                            <button class="carousel-dot" onclick="goToSlide('putih',4,5,event)"></button>
+                        </div>
+                    </div>
                     <div class="service-body">
                         <h3 class="service-title">Polymailer<br>Putih LW</h3>
                         <p class="service-desc">Signature kami. Double layer 0.6 micron, putih premium, ekstra tebal untuk pengiriman jauh. Ideal untuk brand fashion premium.</p>
@@ -205,7 +238,11 @@
             <a href="polymailer.html" style="text-decoration: none; color: inherit;">
                 <div class="service-card">
                     <div class="service-tag"><span>02 — PRODUCT LINE</span><span>◇</span></div>
-                    <div class="service-image">POLYMAILER LINE GRID</div>
+                    <div style="aspect-ratio:4/3; overflow:hidden; border-bottom: 2px solid var(--ink);">
+                        <video style="width:100%;height:100%;object-fit:cover;display:block;" autoplay muted loop playsinline>
+                            <source src="asset/service-polymailer/service-polymailer.mp4" type="video/mp4">
+                        </video>
+                    </div>
                     <div class="service-body">
                         <h3 class="service-title">Polymailer<br>Line Lengkap</h3>
                         <p class="service-desc">Berbagai warna &amp; ukuran untuk semua segmen brand — olshop fashion, F&amp;B, skincare, aksesoris.</p>
@@ -218,7 +255,24 @@
             <a href="jasa-sablon.html" style="text-decoration: none; color: inherit;">
                 <div class="service-card">
                     <div class="service-tag"><span>03 — SERVICE</span><span>◆</span></div>
-                    <div class="service-image">SABLON WORKSHOP SHOT</div>
+                    <div class="carousel service-image" id="carousel-sablon" style="aspect-ratio:4/3; background:var(--ink);">
+                        <div class="carousel-track" id="track-sablon">
+                            <img src="asset/service-sablon/service-sablon-01.jpeg" alt="Sablon 01">
+                            <img src="asset/service-sablon/service-sablon-02.jpeg" alt="Sablon 02">
+                            <img src="asset/service-sablon/service-sablon-03.jpeg" alt="Sablon 03">
+                            <img src="asset/service-sablon/service-sablon-04.jpeg" alt="Sablon 04">
+                            <img src="asset/service-sablon/service-sablon-05.jpeg" alt="Sablon 05">
+                        </div>
+                        <button class="carousel-btn prev" onclick="moveCarousel('sablon',-1,5,event)">‹</button>
+                        <button class="carousel-btn next" onclick="moveCarousel('sablon',1,5,event)">›</button>
+                        <div class="carousel-dots" id="dots-sablon">
+                            <button class="carousel-dot active" onclick="goToSlide('sablon',0,5,event)"></button>
+                            <button class="carousel-dot" onclick="goToSlide('sablon',1,5,event)"></button>
+                            <button class="carousel-dot" onclick="goToSlide('sablon',2,5,event)"></button>
+                            <button class="carousel-dot" onclick="goToSlide('sablon',3,5,event)"></button>
+                            <button class="carousel-dot" onclick="goToSlide('sablon',4,5,event)"></button>
+                        </div>
+                    </div>
                     <div class="service-body">
                         <h3 class="service-title">Jasa Sablon<br>Manual</h3>
                         <p class="service-desc">Custom logo brand lo di polymailer apapun. Dari MOQ kecil sampai produksi massal 10.000+ pcs.</p>
@@ -238,15 +292,21 @@
             <h2 class="display display-l">Hasil sablon<br>dari brand yang<br><span style="color: var(--amber);">stay sama kami.</span></h2>
             <p class="lede" style="color: rgba(245,245,242,0.7); max-width: 360px;">100+ brand fashion Indonesia. Setiap order = setiap meja jalan.</p>
         </div>
-        <div class="portfolio-grid">
-            <div class="portfolio-item"><div class="portfolio-label">PUTIH LW · 30×40+5 · 2W · 1500pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">STANDARD · 25×35 · 1W · 3000pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">PUTIH LW · 35×45+5 · 3W · 1000pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">STANDARD · 20×30 · 2W · 5000pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">PUTIH LW · 25×35+5 · 1W · 2000pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">STANDARD · 30×40 · 4W · 800pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">PUTIH LW · 20×30+5 · 2W · 4000pcs</div></div>
-            <div class="portfolio-item"><div class="portfolio-label">STANDARD · 35×45 · 1W · 1200pcs</div></div>
+        <div class="porto-carousel">
+            <div class="porto-grid" id="porto-grid">
+                <img src="asset/Portofolio/porto-01.jpeg" alt="Portfolio 01">
+                <img src="asset/Portofolio/porto-02.jpeg" alt="Portfolio 02">
+                <img src="asset/Portofolio/porto-03.jpeg" alt="Portfolio 03">
+                <img src="asset/Portofolio/porto-04.jpeg" alt="Portfolio 04">
+                <img src="asset/Portofolio/porto-05.jpeg" alt="Portfolio 05">
+                <img src="asset/Portofolio/porto-06.jpeg" alt="Portfolio 06">
+                <img src="asset/Portofolio/porto-07.jpeg" alt="Portfolio 07">
+                <img src="asset/Portofolio/porto-08.jpeg" alt="Portfolio 08">
+                <img src="asset/Portofolio/porto-09.jpeg" alt="Portfolio 09">
+                <img src="asset/Portofolio/porto-10.jpeg" alt="Portfolio 10">
+                <img src="asset/Portofolio/porto-11.jpeg" alt="Portfolio 11">
+                <img src="asset/Portofolio/porto-12.jpeg" alt="Portfolio 12">
+            </div>
         </div>
         <div class="portfolio-cta">
             <a href="portfolio.html" class="btn btn-amber btn-lg">Lihat Semua Portfolio →</a>
@@ -372,6 +432,28 @@
     </div>
 </footer>
 
+<script>
+// Carousel logic
+const carouselState = {};
+function moveCarousel(id, dir, total, e) {
+    if(e) e.preventDefault();
+    carouselState[id] = carouselState[id] || 0;
+    carouselState[id] = (carouselState[id] + dir + total) % total;
+    updateCarousel(id, total);
+}
+function goToSlide(id, idx, total, e) {
+    if(e) e.preventDefault();
+    carouselState[id] = idx;
+    updateCarousel(id, total);
+}
+function updateCarousel(id, total) {
+    const idx = carouselState[id];
+    const track = document.getElementById('track-' + id);
+    if(track) track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+    const dots = document.querySelectorAll('#dots-' + id + ' .carousel-dot');
+    dots.forEach((d,i) => d.classList.toggle('active', i === idx));
+}
+</script>
 <script>
 function toggleFaq(btn) {
     const item = btn.parentElement;
