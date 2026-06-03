@@ -316,12 +316,8 @@ tbody tr:hover td{background:#F9F8F4}
 <div class="app">
   <!-- SIDEBAR -->
   <div class="sb">
-    <div class="sb-logo">
-      <div class="sb-logo-img"><img id="sb-logo" src="/logo.jpeg" alt="SP"></div>
-      <div>
-        <div class="sb-logo-text">Sultan Plastik</div>
-        <div class="sb-logo-sub">Bandung · 2020</div>
-      </div>
+    <div class="sb-logo" style="justify-content:center;padding:16px 12px;">
+      <img src="/logo.jpeg" alt="Sultan Plastik Bandung" style="width:140px;height:auto;filter:brightness(0) invert(1);display:block;">
     </div>
     <nav class="sb-nav">
       <div class="sb-sec">Menu Utama</div>
@@ -780,6 +776,14 @@ tbody tr:hover td{background:#F9F8F4}
       </div>
     </div>
     <div id="print-content"></div>
+    <div style="padding:12px 18px;background:#F5F4F0;border-top:1px solid #DDD;display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;">
+      <button class="btn btn-sm" id="btn-switch-print-bottom" onclick="switchPrintType()" style="display:none">Lihat Surat Jalan</button>
+      <button class="btn btn-gold btn-sm" onclick="window.print()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Cetak / Print
+      </button>
+      <button class="btn btn-sm" onclick="closePrint()">Tutup</button>
+    </div>
   </div>
 </div>
 
@@ -1357,7 +1361,7 @@ function renderRiwayat(){
         <td style="white-space:nowrap">
           <button class="btn btn-sm" onclick="openPrintInvoice('${t.id}')" style="margin-right:3px" title="Print Invoice">Invoice</button>
           <button class="btn btn-sm" onclick="openPrintSJ('${t.id}')" style="margin-right:3px" title="Print Surat Jalan">SJ</button>
-          <button class="btn btn-sm btn-danger" onclick="hapus('${t.id}')">Hapus</button>
+          ${currentRole==='admin'?`<button class="btn btn-sm btn-danger" onclick="hapus('${t.id}')">Hapus</button>`:''}
         </td>
       </tr>`).join('')
     : '<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--txt3)">Belum ada transaksi</td></tr>';
@@ -1519,6 +1523,8 @@ function openPrintInvoice(id){
   document.getElementById('print-content').innerHTML = buildInvoice(t);
   document.getElementById('btn-switch-print').style.display = 'inline-flex';
   document.getElementById('btn-switch-print').textContent = 'Lihat Surat Jalan';
+  document.getElementById('btn-switch-print-bottom').style.display = 'inline-flex';
+  document.getElementById('btn-switch-print-bottom').textContent = 'Lihat Surat Jalan';
   document.getElementById('print-modal').classList.add('show');
 }
 
@@ -1531,6 +1537,8 @@ function openPrintSJ(id){
   document.getElementById('print-content').innerHTML = buildSuratJalan(t);
   document.getElementById('btn-switch-print').style.display = 'inline-flex';
   document.getElementById('btn-switch-print').textContent = 'Lihat Invoice';
+  document.getElementById('btn-switch-print-bottom').style.display = 'inline-flex';
+  document.getElementById('btn-switch-print-bottom').textContent = 'Lihat Invoice';
   document.getElementById('print-modal').classList.add('show');
 }
 
@@ -1560,7 +1568,10 @@ function buildInvoice(t){
     </tr>`).join('');
   const emptyRows = Array(Math.max(0,10-t.items.length)).fill('<tr><td colspan="7" style="height:22px">&nbsp;</td></tr>').join('');
 
-  return `<div class="np">
+  return `<div class="np" style="position:relative;">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);opacity:0.06;pointer-events:none;z-index:0;width:320px;">
+      <img src="/logo.jpeg" alt="" style="width:100%;height:auto;display:block;">
+    </div>
     <div class="np-logo-area">
       <div class="np-logo-left">
         <img class="np-logo-img" src="${LOGO_B64}" alt="Sultan Plastik">
@@ -1627,7 +1638,10 @@ function buildSuratJalan(t){
     </tr>`).join('');
   const emptyRows = Array(Math.max(0,8-t.items.length)).fill('<tr><td colspan="6" style="height:22px">&nbsp;</td></tr>').join('');
 
-  return `<div class="np">
+  return `<div class="np" style="position:relative;">
+    <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);opacity:0.06;pointer-events:none;z-index:0;width:320px;">
+      <img src="/logo.jpeg" alt="" style="width:100%;height:auto;display:block;">
+    </div>
     <div class="np-logo-area" style="margin-bottom:10px">
       <div class="np-logo-left">
         <img class="np-logo-img" src="${LOGO_B64}" alt="Sultan Plastik">
