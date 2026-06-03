@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Sultan Plastik Bandung — Sistem Transaksi</title>
+<!-- Firebase SDK - load first so it's ready when scripts run -->
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/compat/firebase-app-compat.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/compat/firebase-firestore-compat.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -750,7 +753,6 @@ const FB_PROJECT = 'sultan-plastik-app';
 const FB_BASE = 'https://firestore.googleapis.com/v1/projects/'+FB_PROJECT+'/databases/(default)/documents';
 const FB_KEY = 'AIzaSyAY22rAH4ict7TMv3pkQ1ehoZSKcySTuYo';
 let db = true; // flag for online mode
-let fbOnline = false;
 async function syncToCloud(){
   const btn = document.getElementById('btn-sync');
   btn.textContent = 'Syncing...';
@@ -924,116 +926,125 @@ async function pullFromFirebase(){
   } catch(e){ console.error('Pull error:', e); }
 }
 
+// ===== FIREBASE CONFIG =====
+const FB_CONFIG = {
+  apiKey: "AIzaSyAY22rAH4ict7TMv3pkQ1ehoZSKcySTuYo",
+  authDomain: "sultan-plastik-app.firebaseapp.com",
+  projectId: "sultan-plastik-app",
+  storageBucket: "sultan-plastik-app.firebasestorage.app",
+  messagingSenderId: "254971941248",
+  appId: "1:254971941248:web:908d417227a5aa2a60b165"
+};
+let fsdb = null;
+let fbOnline = false;
+
+function setStatusOnline(mode){
+  fbOnline = true;
+  const s = document.getElementById('fb-status');
+  if(s){ s.textContent = 'Online ✓'+(mode?' ('+mode+')':''); s.style.background='#EAF3DE'; s.style.color='#1B5E3B'; }
+  const btn = document.getElementById('btn-sync');
+  if(btn) btn.style.display = 'inline-flex';
+}
+function setStatusOffline(msg){
+  fbOnline = false;
+  const s = document.getElementById('fb-status');
+  if(s){ s.textContent = msg||'Offline (lokal)'; s.style.background='#FCEBEB'; s.style.color='#B71C1C'; }
+}
+
 async function startFirebaseSync() {
-  // Try Firebase SDK first (jsdelivr CDN)
-  try {
-    if(typeof firebase !== 'undefined'){
-      if(!firebase.apps.length){
-        firebase.initializeApp({
-          apiKey: "AIzaSyAY22rAH4ict7TMv3pkQ1ehoZSKcySTuYo",
-          authDomain: "sultan-plastik-app.firebaseapp.com",
-          projectId: "sultan-plastik-app",
-          storageBucket: "sultan-plastik-app.firebasestorage.app",
-          messagingSenderId: "254971941248",
-          appId: "1:254971941248:web:908d417227a5aa2a60b165"
-        });
-      }
-      const fsdb = firebase.firestore();
-      // Test connection with a simple read
-      await fsdb.collection('_test').doc('ping').set({t:Date.now()});
-      // SDK works! Use real-time listeners
-      fbOnline = true;
-      document.getElementById('fb-status').textContent = 'Online ✓ (realtime)';
-      document.getElementById('fb-status').style.background = '#EAF3DE';
-      document.getElementById('fb-status').style.color = '#1B5E3B';
-      var syncBtn = document.getElementById('btn-sync');
-      if(syncBtn) syncBtn.style.display = 'inline-flex';
-      
-      // Override fb functions with SDK versions
-      window.fbSaveNota = async function(nota){
-        try{ await fsdb.collection('transaksi').doc(nota.id.replace(/\//g,'_')).set(nota); }catch(e){}
-      };
-      window.fbDeleteNota = async function(id){
-        try{ await fsdb.collection('transaksi').doc(id.replace(/\//g,'_')).delete(); }catch(e){}
-      };
-      window.fbSaveKas = async function(entry){
-        try{ await fsdb.collection('kas').doc(entry.id).set(entry); }catch(e){}
-      };
-      window.fbDeleteKas = async function(id){
-        try{ await fsdb.collection('kas').doc(id).delete(); }catch(e){}
-      };
-      
-      // Real-time listener for transaksi
-      fsdb.collection('transaksi').onSnapshot(snap => {
-        const fbData = [];
-        snap.forEach(doc => fbData.push(doc.data()));
-        const merged = {};
-        transaksi.forEach(t => merged[t.id] = t);
-        fbData.forEach(t => { if(t.id) merged[t.id] = t; });
-        transaksi = Object.values(merged).sort((a,b) => (b.ts||0) - (a.ts||0));
-        save(); refreshNotaBadge(); renderAll();
-      });
-      
-      // Real-time listener for kas
-      fsdb.collection('kas').onSnapshot(snap => {
-        const fbKas = [];
-        snap.forEach(doc => fbKas.push(doc.data()));
-        const mergedKas = {};
-        kasData.forEach(k => mergedKas[k.id] = k);
-        fbKas.forEach(k => { if(k.id) mergedKas[k.id] = k; });
-        kasData = Object.values(mergedKas).sort((a,b) => (b.ts||0) - (a.ts||0));
-        localStorage.setItem('spb_kas', JSON.stringify(kasData));
-      });
-      
-      console.log('Firebase SDK connected via jsdelivr!');
-      return; // SDK works, skip REST
-    }
-  } catch(sdkErr){
-    console.warn('Firebase SDK failed, trying REST:', sdkErr);
+  setStatusOffline('Connecting...');
+  // Wait for Firebase SDK to be ready
+  let attempts = 0;
+  while(typeof firebase === 'undefined' && attempts < 20){
+    await new Promise(r => setTimeout(r, 300));
+    attempts++;
   }
-  
-  // Fallback: REST API
+  if(typeof firebase === 'undefined'){
+    console.warn('Firebase SDK not loaded, trying REST...');
+    await startFirebaseREST();
+    return;
+  }
+  try {
+    if(!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
+    fsdb = firebase.firestore();
+    // Test with a lightweight read
+    await fsdb.collection('transaksi').limit(1).get();
+    setStatusOnline('realtime');
+
+    // Override save/delete with SDK
+    window.fbSaveNota = async function(nota){
+      try{ await fsdb.collection('transaksi').doc(nota.id.replace(/\//g,'_')).set(nota); }catch(e){ console.error('fbSaveNota:',e); }
+    };
+    window.fbDeleteNota = async function(id){
+      try{ await fsdb.collection('transaksi').doc(id.replace(/\//g,'_')).delete(); }catch(e){}
+    };
+    window.fbSaveKas = async function(entry){
+      try{ await fsdb.collection('kas').doc(entry.id).set(entry); }catch(e){}
+    };
+    window.fbDeleteKas = async function(id){
+      try{ await fsdb.collection('kas').doc(id).delete(); }catch(e){}
+    };
+
+    // Real-time listener transaksi
+    fsdb.collection('transaksi').onSnapshot(snap => {
+      const fbData = [];
+      snap.forEach(doc => fbData.push(doc.data()));
+      if(fbData.length === 0) return;
+      const merged = {};
+      transaksi.forEach(t => merged[t.id] = t);
+      fbData.forEach(t => { if(t && t.id) merged[t.id] = t; });
+      transaksi = Object.values(merged).sort((a,b) => (b.ts||0) - (a.ts||0));
+      // Update notaNum
+      const maxNum = transaksi.reduce((mx,t) => {
+        const n = parseInt((t.id||'').split('/').pop()) || 0;
+        return n > mx ? n : mx;
+      }, 0);
+      if(maxNum >= notaNum) notaNum = maxNum + 1;
+      save(); refreshNotaBadge(); renderAll();
+    }, err => { console.error('Snapshot error:', err); });
+
+    // Real-time listener kas
+    fsdb.collection('kas').onSnapshot(snap => {
+      const fbKas = [];
+      snap.forEach(doc => fbKas.push(doc.data()));
+      if(fbKas.length === 0) return;
+      const mergedKas = {};
+      kasData.forEach(k => mergedKas[k.id] = k);
+      fbKas.forEach(k => { if(k && k.id) mergedKas[k.id] = k; });
+      kasData = Object.values(mergedKas).sort((a,b) => (b.ts||0) - (a.ts||0));
+      localStorage.setItem('spb_kas', JSON.stringify(kasData));
+    }, err => { console.error('Kas snapshot error:', err); });
+
+    // Push any local-only data to cloud
+    for(const t of transaksi){ await window.fbSaveNota(t); }
+    for(const k of kasData){ await window.fbSaveKas(k); }
+
+    console.log('Firebase SDK connected!');
+  } catch(e){
+    console.warn('Firebase SDK error:', e);
+    await startFirebaseREST();
+  }
+}
+
+async function startFirebaseREST(){
   try {
     const test = await fetch(FB_BASE+'?key='+FB_KEY);
     if(test.ok){
-      fbOnline = true;
-      document.getElementById('fb-status').textContent = 'Online ✓';
-      document.getElementById('fb-status').style.background = '#EAF3DE';
-      document.getElementById('fb-status').style.color = '#1B5E3B';
-      var syncBtn2 = document.getElementById('btn-sync');
-      if(syncBtn2) syncBtn2.style.display = 'inline-flex';
+      setStatusOnline('REST');
+      for(const t of transaksi){ await fbSaveNota(t); }
+      for(const k of kasData){ await fbSaveKas(k); }
+      await pullFromFirebase();
+      setInterval(pullFromFirebase, 15000);
     } else { throw new Error('HTTP '+test.status); }
   } catch(e){
-    document.getElementById('fb-status').textContent = 'Offline (lokal)';
-    document.getElementById('fb-status').style.background = '#FCEBEB';
-    document.getElementById('fb-status').style.color = '#B71C1C';
-    return;
+    setStatusOffline('Offline (lokal)');
   }
-  // Push local data first
-  for(const t of transaksi){ await fbSaveNota(t); }
-  for(const k of kasData){ await fbSaveKas(k); }
-  // Pull and merge
-  await pullFromFirebase();
-  // Poll every 15 seconds
-  setInterval(pullFromFirebase, 15000);
 }
 
-// Enter key on password + Firebase status failsafe
+// Enter key on password
 document.addEventListener('DOMContentLoaded', function(){
   var pwField = document.getElementById('login-pw');
   if(pwField) pwField.addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); });
-  // Failsafe: update status after 5s
-  setTimeout(function(){
-    var s = document.getElementById('fb-status');
-    if(s && s.textContent === 'Connecting...'){
-      if(db){
-        s.textContent='Online ✓'; s.style.background='#EAF3DE'; s.style.color='#1B5E3B';
-        var btn = document.getElementById('btn-sync'); if(btn) btn.style.display='inline-flex';
-      } else {
-        s.textContent='Offline (lokal)'; s.style.background='#FCEBEB'; s.style.color='#B71C1C';
-      }
-    }
-  }, 5000);
 });
 
 function toast(msg, type='ok'){
@@ -1113,21 +1124,21 @@ function doLogin(){
   if(!niDash||!niTrx||!niRiwayat){ try{init();}catch(e){} try{loadFirebase();}catch(e){} return; }
   
   if(currentRole==='owner'){
-    // Owner: Dashboard, Riwayat (view+print), Laporan, Laporan Keuangan
+    // Owner: Dashboard ONLY
     if(niDash)niDash.style.display='';
-    if(niTrx)niTrx.style.display='none';       // Owner gak input
-    if(niRiwayat)niRiwayat.style.display='';
-    if(niProduk)niProduk.style.display='none';     // Owner gak perlu
-    if(niCust)niCust.style.display='none';       // Owner gak perlu
-    if(niKas)niKas.style.display='none';        // Owner gak input kas
-    if(niLapKas)niLapKas.style.display='';
-    if(niLap)niLap.style.display='';
-    if(lapSec)lapSec.style.display='';
-    if(kasSec)kasSec.style.display='';
-    // hide Database section header for owner
-    document.querySelectorAll('.sb-sec').forEach(s => {
-      if(s.textContent.trim()==='Database') s.style.display = 'none';
-    });
+    if(niTrx)niTrx.style.display='none';
+    if(niRiwayat)niRiwayat.style.display='none';
+    if(niProduk)niProduk.style.display='none';
+    if(niCust)niCust.style.display='none';
+    if(niKas)niKas.style.display='none';
+    if(niLapKas)niLapKas.style.display='none';
+    if(niLap)niLap.style.display='none';
+    if(lapSec)lapSec.style.display='none';
+    if(kasSec)kasSec.style.display='none';
+    // hide section headers
+    document.querySelectorAll('.sb-sec').forEach(s => s.style.display = 'none');
+    // Go to dashboard
+    setTimeout(function(){ gp('dashboard', document.querySelector('[data-page="dashboard"]')); }, 100);
   } else {
     // Admin: Input Transaksi, Riwayat (edit), Katalog Produk, Database Customer, Input Kas
     if(niDash)niDash.style.display='none';
@@ -1982,6 +1993,5 @@ function editNota(id){
 function renderAll(){renderDashboard();renderRiwayat();}
 </script>
 </body>
-</html><script src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/compat/firebase-app-compat.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/firebase@10.12.2/compat/firebase-firestore-compat.min.js"></script>
+</html>
 
