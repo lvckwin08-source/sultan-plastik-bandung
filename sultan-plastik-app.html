@@ -29,6 +29,12 @@ button,input,select,textarea{font-family:inherit}
 body.admin-mode .owner-only{display:none!important}
 /* Owner mode: hide admin-only elements */
 body.owner-mode .admin-only{display:none!important}
+/* Owner read-only: hide edit/tambah/hapus buttons */
+body.owner-mode .btn-danger{display:none!important}
+body.owner-mode .btn-green{display:none!important}
+body.owner-mode .admin-edit{display:none!important}
+body.owner-mode #f-new-produk{display:none!important}
+body.owner-mode #f-new-cust{display:none!important}
 ::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:9px}
 
 /* LOGIN */
@@ -371,15 +377,37 @@ tbody tr:hover td{background:#F9F8F4}
         <div class="stats">
           <div class="stat"><div class="stat-lbl">Transaksi Bulan Ini</div><div class="stat-val" id="d-trx">0</div><div class="stat-hint">Total semua: <span id="d-trx-all">0</span></div></div>
           <div class="stat owner-only"><div class="stat-lbl">Omzet Bulan Ini</div><div class="stat-val gold" id="d-omz">Rp 0</div><div class="stat-hint">Margin: <span id="d-pct">0%</span></div></div>
-          <div class="stat owner-only"><div class="stat-lbl">Margin Bulan Ini</div><div class="stat-val green" id="d-mrg">Rp 0</div><div class="stat-hint">Dari total transaksi</div></div>
-          <div class="stat"><div class="stat-lbl">Customer Aktif</div><div class="stat-val" id="d-cust">0</div><div class="stat-hint">DB: 504 customer</div></div>
+          <div class="stat owner-only"><div class="stat-lbl">Customer Aktif</div><div class="stat-val" id="d-cust">0</div><div class="stat-hint">DB: <span id="d-db-cust">0</span> customer</div></div>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+        <!-- Owner margin breakdown -->
+        <div class="stats owner-only" style="margin-top:12px">
+          <div class="stat" style="border-left:4px solid var(--green)">
+            <div class="stat-lbl">Margin Total</div>
+            <div class="stat-val green" id="d-mrg">Rp 0</div>
+            <div class="stat-hint">Semua transaksi bulan ini</div>
+          </div>
+          <div class="stat" style="border-left:4px solid #1B5E3B">
+            <div class="stat-lbl">Margin Lunas</div>
+            <div class="stat-val green" id="d-mrg-lunas">Rp 0</div>
+            <div class="stat-hint"><span id="d-lunas-count">0</span> nota lunas</div>
+          </div>
+          <div class="stat" style="border-left:4px solid #B71C1C">
+            <div class="stat-lbl">Margin Delay</div>
+            <div class="stat-val" style="color:#B71C1C" id="d-mrg-delay">Rp 0</div>
+            <div class="stat-hint"><span id="d-delay-count">0</span> nota belum/DP</div>
+          </div>
+          <div class="stat" style="border-left:4px solid var(--gold)">
+            <div class="stat-lbl">Piutang</div>
+            <div class="stat-val gold" id="d-piutang">Rp 0</div>
+            <div class="stat-hint">DP: <span id="d-piutang-dp">0</span> · Belum: <span id="d-piutang-belum">0</span></div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px">
           <div class="card">
             <div class="card-title">Nota Terbaru</div>
             <div class="tw"><table>
               <thead><tr><th>Nota</th><th>Customer</th><th class="r">Total</th><th>Status</th></tr></thead>
-              <tbody id="d-recent"><tr><td colspan="5" style="text-align:center;padding:24px;color:var(--txt3)">Belum ada transaksi</td></tr></tbody>
+              <tbody id="d-recent"><tr><td colspan="4" style="text-align:center;padding:24px;color:var(--txt3)">Belum ada transaksi</td></tr></tbody>
             </table></div>
           </div>
           <div class="card">
@@ -505,7 +533,7 @@ tbody tr:hover td{background:#F9F8F4}
         <div class="frow">
           <input class="search" type="text" placeholder="Cari kode atau nama barang..." oninput="fProd(this.value)">
           <div id="prod-count" style="font-size:11px;color:var(--txt3);white-space:nowrap"></div>
-          <button class="btn btn-sm btn-gold" onclick="openModal('modal-addprod')">
+          <button class="btn btn-sm btn-gold admin-edit" onclick="openModal('modal-addprod')">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Tambah Produk
           </button>
@@ -523,7 +551,7 @@ tbody tr:hover td{background:#F9F8F4}
         <div class="frow">
           <input class="search" type="text" placeholder="Cari ID, nama, atau kota..." oninput="fCust(this.value)">
           <div id="cust-count" style="font-size:11px;color:var(--txt3);white-space:nowrap"></div>
-          <button class="btn btn-sm btn-gold" onclick="openModal('modal-addcust')">
+          <button class="btn btn-sm btn-gold admin-edit" onclick="openModal('modal-addcust')">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Tambah Customer
           </button>
@@ -1124,19 +1152,20 @@ function doLogin(){
   if(!niDash||!niTrx||!niRiwayat){ try{init();}catch(e){} try{loadFirebase();}catch(e){} return; }
   
   if(currentRole==='owner'){
-    // Owner: Dashboard ONLY
+    // Owner: semua menu tampil, tapi read only
     if(niDash)niDash.style.display='';
-    if(niTrx)niTrx.style.display='none';
-    if(niRiwayat)niRiwayat.style.display='none';
-    if(niProduk)niProduk.style.display='none';
-    if(niCust)niCust.style.display='none';
-    if(niKas)niKas.style.display='none';
-    if(niLapKas)niLapKas.style.display='none';
-    if(niLap)niLap.style.display='none';
-    if(lapSec)lapSec.style.display='none';
+    if(niTrx)niTrx.style.display='none';        // Owner ga input
+    if(niRiwayat)niRiwayat.style.display='';
+    if(niProduk)niProduk.style.display='';
+    if(niCust)niCust.style.display='';
+    if(niKas)niKas.style.display='none';         // Owner ga input kas
+    if(niLapKas)niLapKas.style.display='';
+    if(niLap)niLap.style.display='';
+    if(lapSec)lapSec.style.display='';
     if(kasSec)kasSec.style.display='none';
-    // hide section headers
-    document.querySelectorAll('.sb-sec').forEach(s => s.style.display = 'none');
+    document.querySelectorAll('.sb-sec').forEach(s => {
+      if(s.textContent.trim()==='KEUANGAN' || s.textContent.trim()==='Keuangan') s.style.display='';
+    });
     // Go to dashboard
     setTimeout(function(){ gp('dashboard', document.querySelector('[data-page="dashboard"]')); }, 100);
   } else {
@@ -1370,34 +1399,42 @@ function renderDashboard(){
   const mrg = bln.reduce((s,t)=>s+t.margin,0);
   const pct = omz>0?Math.round(mrg/omz*100):0;
   const custs = new Set(bln.map(t=>t.custId)).size;
-  
-  // Lunas vs Piutang
+
+  // Status breakdown
   const lunasNota = bln.filter(t=>t.status==='lunas');
   const dpNota = bln.filter(t=>t.status==='dp');
   const belumNota = bln.filter(t=>t.status==='belum');
-  const totalLunas = lunasNota.reduce((s,t)=>s+t.total,0);
-  const totalDP = dpNota.reduce((s,t)=>s+t.total,0);
-  const totalBelum = belumNota.reduce((s,t)=>s+t.total,0);
-  const totalPiutang = totalDP + totalBelum;
-  
+  const delayNota = [...dpNota, ...belumNota];
+
+  const mrgLunas = lunasNota.reduce((s,t)=>s+t.margin,0);
+  const mrgDelay = delayNota.reduce((s,t)=>s+t.margin,0);
+  const totalPiutang = delayNota.reduce((s,t)=>s+t.total,0);
+
   document.getElementById('d-trx').textContent = bln.length;
+  document.getElementById('d-trx-all').textContent = transaksi.length;
   document.getElementById('d-cust').textContent = custs;
+  document.getElementById('d-db-cust').textContent = CUST_DB.length;
   document.getElementById('d-omz').textContent = fRpShort(omz);
   document.getElementById('d-pct').textContent = pct+'%';
   document.getElementById('d-mrg').textContent = fRpShort(mrg);
-  document.getElementById('d-lunas').textContent = fRpShort(totalLunas);
+  document.getElementById('d-mrg-lunas').textContent = fRpShort(mrgLunas);
   document.getElementById('d-lunas-count').textContent = lunasNota.length;
+  document.getElementById('d-mrg-delay').textContent = fRpShort(mrgDelay);
+  document.getElementById('d-delay-count').textContent = delayNota.length;
   document.getElementById('d-piutang').textContent = fRpShort(totalPiutang);
   document.getElementById('d-piutang-dp').textContent = dpNota.length;
   document.getElementById('d-piutang-belum').textContent = belumNota.length;
+
+  // Nota terbaru — owner: no cycleStatus button (read only)
+  const isOwner = currentRole === 'owner';
   document.getElementById('d-recent').innerHTML = transaksi.slice(0,6).map(t=>`
     <tr>
       <td class="mono">${t.id}</td>
       <td class="trunc">${t.custNama}</td>
-      <td class="c">${t.items.length} item</td>
       <td class="r" style="white-space:nowrap;font-weight:600">${fRp(t.total)}</td>
-      <td><span onclick="cycleStatus('${t.id}')" style="cursor:pointer" title="Klik untuk ubah status">${badge(t.status)}</span></td>
-    </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--txt3)">Belum ada transaksi</td></tr>';
+      <td>${isOwner ? badge(t.status) : '<span onclick="cycleStatus(\''+t.id+'\')" style="cursor:pointer" title="Klik untuk ubah status">'+badge(t.status)+'</span>'}</td>
+    </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--txt3)">Belum ada transaksi</td></tr>';
+
   const cm={};bln.forEach(t=>{if(!cm[t.custNama])cm[t.custNama]=0;cm[t.custNama]+=t.total;});
   const top = Object.entries(cm).sort((a,b)=>b[1]-a[1]).slice(0,5);
   document.getElementById('d-topcust').innerHTML = top.length
