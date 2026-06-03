@@ -44,7 +44,7 @@
         <p class="lede">Custom logo brand lo di polymailer apapun — PUTIH LW, polymailer warna, atau bring your own. Multi-warna, detail tinggi, MOQ fleksibel.</p>
         <div style="display: flex; gap: 16px; flex-wrap: wrap;">
             <a href="#wa" class="btn btn-primary btn-lg">💬 Konsul + Sample GRATIS</a>
-            <a href="portfolio.html" class="btn btn-secondary btn-lg">Lihat Hasil Sablon</a>
+            <a href="#hasil-sablon" class="btn btn-secondary btn-lg">Lihat Hasil Sablon</a>
         </div>
     </div>
 </section>
@@ -229,21 +229,42 @@
     </div>
 </section>
 
-<section class="section" style="background:var(--ink);color:var(--base);padding:64px 0;">
+<section id="hasil-sablon" class="section" style="background:var(--ink);color:var(--base);padding:64px 0;">
     <div class="container">
         <div class="section-label" style="color:var(--amber)"><span><span class="section-num" style="color:var(--amber)">05 / 05</span> — HASIL SABLON</span></div>
         <h2 class="display display-l" style="margin-bottom:32px;">Hasil nyata.<br><span style="color:var(--amber)">Brand nyata.</span></h2>
-        <div style="position:relative;overflow:hidden;" id="sablon-carousel">
+        <div style="position:relative;overflow:hidden;">
             <div style="display:flex;transition:transform 0.4s ease;" id="sablon-track">
-                <img src="asset/hasil jasa sablon/evos.jpeg" style="width:33.333%;flex-shrink:0;aspect-ratio:1;object-fit:cover;" alt="Evos">
-                <img src="asset/hasil jasa sablon/hara.jpeg" style="width:33.333%;flex-shrink:0;aspect-ratio:1;object-fit:cover;" alt="Hara">
-                <img src="asset/hasil jasa sablon/united1.jpeg" style="width:33.333%;flex-shrink:0;aspect-ratio:1;object-fit:cover;" alt="United 1">
-                <img src="asset/hasil jasa sablon/united2.jpeg" style="width:33.333%;flex-shrink:0;aspect-ratio:1;object-fit:cover;" alt="United 2">
-                <img src="asset/hasil jasa sablon/dreamstory.jpeg" style="width:33.333%;flex-shrink:0;aspect-ratio:1;object-fit:cover;" alt="Dreamstory">
-                <img src="asset/hasil jasa sablon/dowa.jpeg" style="width:33.333%;flex-shrink:0;aspect-ratio:1;object-fit:cover;" alt="Dowa">
+                <div style="display:flex;gap:4px;min-width:100%;flex-shrink:0;">
+                    <img src="asset/hasil jasa sablon/evos.jpeg" style="width:50%;aspect-ratio:4/3;object-fit:cover;" alt="Evos">
+                    <img src="asset/hasil jasa sablon/hara.jpeg" style="width:50%;aspect-ratio:4/3;object-fit:cover;" alt="Hara">
+                </div>
+                <div style="display:flex;gap:4px;min-width:100%;flex-shrink:0;">
+                    <img src="asset/hasil jasa sablon/united1.jpeg" style="width:50%;aspect-ratio:4/3;object-fit:cover;" alt="United 1">
+                    <img src="asset/hasil jasa sablon/united2.jpeg" style="width:50%;aspect-ratio:4/3;object-fit:cover;" alt="United 2">
+                </div>
+                <div style="display:flex;gap:4px;min-width:100%;flex-shrink:0;">
+                    <img src="asset/hasil jasa sablon/dreamstory.jpeg" style="width:50%;aspect-ratio:4/3;object-fit:cover;" alt="Dreamstory">
+                    <img src="asset/hasil jasa sablon/dowa.jpeg" style="width:50%;aspect-ratio:4/3;object-fit:cover;" alt="Dowa">
+                </div>
+                <div style="display:flex;gap:4px;min-width:100%;flex-shrink:0;">
+                    <img src="asset/hasil jasa sablon/erigo.jpeg" style="width:50%;aspect-ratio:4/3;object-fit:cover;" alt="Erigo">
+                    <img src="asset/hasil jasa sablon/dinda.jpeg" style="width:50%;aspect-ratio:4/3;object-fit:cover;" alt="Dinda">
+                </div>
+                <div style="display:flex;gap:4px;min-width:100%;flex-shrink:0;">
+                    <img src="asset/hasil jasa sablon/delta.jpeg" style="width:50%;aspect-ratio:4/3;object-fit:cover;" alt="Delta">
+                    <div style="width:50%;aspect-ratio:4/3;background:#1a1a1a;"></div>
+                </div>
             </div>
             <button onclick="moveSablon(-1)" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);background:var(--amber);color:var(--ink);border:none;width:40px;height:40px;font-size:20px;cursor:pointer;font-weight:700;">‹</button>
             <button onclick="moveSablon(1)" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:var(--amber);color:var(--ink);border:none;width:40px;height:40px;font-size:20px;cursor:pointer;font-weight:700;">›</button>
+            <div style="display:flex;gap:8px;justify-content:center;padding:16px 0 0;">
+                <button class="sablon-dot" onclick="goSablon(0)" style="width:8px;height:8px;border-radius:50%;border:none;background:var(--amber);cursor:pointer;"></button>
+                <button class="sablon-dot" onclick="goSablon(1)" style="width:8px;height:8px;border-radius:50%;border:none;background:rgba(255,255,255,0.3);cursor:pointer;"></button>
+                <button class="sablon-dot" onclick="goSablon(2)" style="width:8px;height:8px;border-radius:50%;border:none;background:rgba(255,255,255,0.3);cursor:pointer;"></button>
+                <button class="sablon-dot" onclick="goSablon(3)" style="width:8px;height:8px;border-radius:50%;border:none;background:rgba(255,255,255,0.3);cursor:pointer;"></button>
+                <button class="sablon-dot" onclick="goSablon(4)" style="width:8px;height:8px;border-radius:50%;border:none;background:rgba(255,255,255,0.3);cursor:pointer;"></button>
+            </div>
         </div>
         <div style="text-align:center;margin-top:32px;">
             <a href="portfolio.html" class="btn btn-amber btn-lg">Lihat Semua Portfolio →</a>
@@ -252,11 +273,20 @@
 </section>
 <script>
 let sablonIdx = 0;
+const sablonTotal = 5;
 function moveSablon(dir){
-    const total = 6, visible = 3;
-    const max = total - visible;
-    sablonIdx = Math.max(0, Math.min(sablonIdx + dir, max));
-    document.getElementById('sablon-track').style.transform = 'translateX(-'+(sablonIdx*33.333)+'%)';
+    sablonIdx = (sablonIdx + dir + sablonTotal) % sablonTotal;
+    updateSablon();
+}
+function goSablon(idx){
+    sablonIdx = idx;
+    updateSablon();
+}
+function updateSablon(){
+    document.getElementById('sablon-track').style.transform = 'translateX(-'+(sablonIdx*100)+'%)';
+    document.querySelectorAll('.sablon-dot').forEach((d,i) => {
+        d.style.background = i===sablonIdx ? 'var(--amber)' : 'rgba(255,255,255,0.3)';
+    });
 }
 </script>
 
