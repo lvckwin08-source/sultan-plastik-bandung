@@ -466,9 +466,10 @@ function toggleFaq(btn) {
 
 <!-- SULTAN PLASTIK CHATBOT WIDGET -->
 <style>
-#sp-chat-btn{position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:#C8A84B;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(200,168,75,.4);z-index:9999;display:flex;align-items:center;justify-content:center;transition:transform .2s}
-#sp-chat-btn:hover{transform:scale(1.08)}
-#sp-chat-btn svg{width:28px;height:28px;fill:#1a1a1a}
+#sp-chat-btn{position:fixed;bottom:24px;right:24px;padding:10px 20px;border-radius:40px;background:#C8A84B;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(200,168,75,.4);z-index:9999;display:flex;align-items:center;gap:8px;transition:transform .2s;font-family:Manrope,sans-serif}
+#sp-chat-btn:hover{transform:scale(1.05)}
+#sp-chat-btn svg{width:20px;height:20px;fill:#1a1a1a}
+#sp-chat-btn span{font-size:13px;font-weight:700;color:#1a1a1a}
 #sp-chat-box{position:fixed;bottom:96px;right:24px;width:370px;max-height:520px;background:#1a1a1a;border:1px solid rgba(200,168,75,.3);border-radius:16px;z-index:9999;display:none;flex-direction:column;overflow:hidden;box-shadow:0 12px 48px rgba(0,0,0,.5);font-family:'Manrope',sans-serif}
 #sp-chat-box.open{display:flex}
 #sp-chat-head{background:#111;padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(200,168,75,.2)}
@@ -482,6 +483,10 @@ function toggleFaq(btn) {
 .sp-msg-bot{background:#2a2a2a;color:#f5f5f2;border-bottom-left-radius:4px;align-self:flex-start}
 .sp-msg-user{background:#C8A84B;color:#1a1a1a;border-bottom-right-radius:4px;align-self:flex-end;font-weight:500}
 .sp-msg-bot a{color:#C8A84B;text-decoration:underline}
+.sp-msg-bot img{width:140px;height:100px;object-fit:cover;border-radius:8px;flex-shrink:0}
+.sp-img-carousel{display:flex;gap:6px;overflow-x:auto;padding:6px 0;scroll-snap-type:x mandatory}
+.sp-img-carousel::-webkit-scrollbar{height:3px}
+.sp-img-carousel::-webkit-scrollbar-thumb{background:#C8A84B;border-radius:2px}
 #sp-chat-input-wrap{padding:12px 16px;border-top:1px solid rgba(200,168,75,.15);display:flex;gap:8px;background:#111}
 #sp-chat-input{flex:1;background:#2a2a2a;border:1px solid rgba(200,168,75,.2);border-radius:8px;padding:10px 14px;color:#f5f5f2;font-size:13px;font-family:inherit;outline:none;resize:none}
 #sp-chat-input::placeholder{color:rgba(245,245,242,.3)}
@@ -497,6 +502,7 @@ function toggleFaq(btn) {
 
 <button id="sp-chat-btn" onclick="spToggleChat()">
   <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+  <span>Tanya Kami</span>
 </button>
 
 <div id="sp-chat-box">
@@ -536,6 +542,8 @@ const SP_KB = [
   {k:['halo','hai','hi','hello','hey','pagi','siang','sore','malam','assalamualaikum'],a:'Halo! 👋 Selamat datang di <b>Sultan Plastik Bandung</b>. Ada yang bisa kami bantu? Tanya aja soal produk, harga, atau cara order!'},
   {k:['moulding','screen','film'],a:'<b>Moulding/Screen sablon</b> kami simpan setelah order pertama. Reorder desain yang sama = <b>langsung produksi, gak perlu bikin moulding baru</b> (gratis!).'},
   {k:['desain','format','file','ai','psd'],a:'Format desain yang diterima: <b>AI, PSD, PDF</b>, atau JPG/PNG resolusi tinggi (min 300dpi). Konsul desain gratis sebelum produksi!'},
+  {k:['foto','gambar','picture','image','lihat','liat','show','poto'],a:'Ini beberapa produk kami:<br><div class="sp-img-carousel"><img src="asset/foto putih LW/service-putih-lw-02.jpeg"><img src="asset/Portofolio/porto-01.jpeg"><img src="asset/Portofolio/porto-02.jpeg"><img src="asset/Portofolio/porto-03.jpeg"></div><b>Polymailer PUTIH LW</b> — Signature double layer 0.6 micron<br><br>Mau lihat lebih banyak? <a href="portfolio.html">Lihat Portfolio →</a>'},
+  {k:['hasil sablon','contoh sablon','sablon result'],a:'Ini contoh hasil sablon kami:<br><div class="sp-img-carousel"><img src="asset/hasil jasa sablon/evos.jpeg"><img src="asset/hasil jasa sablon/erigo.jpeg"><img src="asset/hasil jasa sablon/hara.jpeg"><img src="asset/hasil jasa sablon/dreamstory.jpeg"></div><a href="portfolio.html">Lihat semua portfolio →</a>'},
 ];
 
 const SP_QUICK = ['Harga polymailer?','Cara order?','MOQ minimum?','Jasa sablon?','PUTIH LW?','Hubungi WA'];
