@@ -466,10 +466,10 @@ function toggleFaq(btn) {
 
 <!-- SULTAN PLASTIK CHATBOT WIDGET -->
 <style>
-#sp-chat-btn{position:fixed;bottom:24px;right:24px;padding:10px 20px;border-radius:40px;background:#C8A84B;border:none;cursor:pointer;box-shadow:0 4px 20px rgba(200,168,75,.4);z-index:9999;display:flex;align-items:center;gap:8px;transition:transform .2s;font-family:Manrope,sans-serif}
+#sp-chat-btn{position:fixed;bottom:20px;right:20px;padding:8px 16px;border-radius:30px;background:#C8A84B;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(200,168,75,.4);z-index:9999;display:flex;align-items:center;gap:6px;transition:transform .2s;font-family:Manrope,sans-serif}
 #sp-chat-btn:hover{transform:scale(1.05)}
-#sp-chat-btn svg{width:20px;height:20px;fill:#1a1a1a}
-#sp-chat-btn span{font-size:13px;font-weight:700;color:#1a1a1a}
+#sp-chat-btn svg{width:16px;height:16px;fill:#1a1a1a}
+#sp-chat-btn span{font-size:11px;font-weight:700;color:#1a1a1a}
 #sp-chat-box{position:fixed;bottom:96px;right:24px;width:370px;max-height:520px;background:#1a1a1a;border:1px solid rgba(200,168,75,.3);border-radius:16px;z-index:9999;display:none;flex-direction:column;overflow:hidden;box-shadow:0 12px 48px rgba(0,0,0,.5);font-family:'Manrope',sans-serif}
 #sp-chat-box.open{display:flex}
 #sp-chat-head{background:#111;padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(200,168,75,.2)}
@@ -538,7 +538,7 @@ const SP_KB = [
   {k:['alamat','lokasi','dimana','where','address','workshop'],a:'<b>Sultan Plastik Bandung</b><br>Jl. Terusan Batununggal Gg. Sukamulya No.41 RT.2/RW.04<br>Mengger, Bandung Kidul, Kota Bandung 40267<br>WA: 0819-4793-1800'},
   {k:['portfolio','hasil','contoh sablon','brand'],a:'100+ brand fashion Indonesia udah pakai jasa kami. <a href="portfolio.html">Lihat Portfolio →</a>'},
   {k:['zipper','ziplock','klip'],a:'Kami juga jual <b>Zipper Bag</b> berbagai grade & ukuran. Bisa sablon custom juga! Hubungi WA untuk detail.'},
-  {k:['whatsapp','wa','kontak','contact','hubungi','telp','chat'],a:'<b>Hubungi kami:</b><br>💬 WA: <a href="https://wa.me/6281947931800" target="_blank">0819-4793-1800</a><br>📷 IG: @sultanplastikbandung<br>Senin-Minggu, 24 Jam'},
+  {k:['whatsapp','wa','kontak','contact','hubungi','telp','chat','hubungi kami'],a:'<b>Hubungi kami:</b><br>💬 WA: <a href="https://wa.me/6281947931800" target="_blank">0819-4793-1800</a><br>🎵 TikTok: <a href="https://www.tiktok.com/@packking99" target="_blank">@packking99</a><br>🛒 Shopee: <a href="https://shopee.co.id/sultan.packaging" target="_blank">sultan.packaging</a><br>Senin-Minggu, 24 Jam'},
   {k:['halo','hai','hi','hello','hey','pagi','siang','sore','malam','assalamualaikum'],a:'Halo! 👋 Selamat datang di <b>Sultan Plastik Bandung</b>. Ada yang bisa kami bantu? Tanya aja soal produk, harga, atau cara order!'},
   {k:['moulding','screen','film'],a:'<b>Moulding/Screen sablon</b> kami simpan setelah order pertama. Reorder desain yang sama = <b>langsung produksi, gak perlu bikin moulding baru</b> (gratis!).'},
   {k:['desain','format','file','ai','psd'],a:'Format desain yang diterima: <b>AI, PSD, PDF</b>, atau JPG/PNG resolusi tinggi (min 300dpi). Konsul desain gratis sebelum produksi!'},
@@ -546,7 +546,7 @@ const SP_KB = [
   {k:['hasil sablon','contoh sablon','sablon result'],a:'Ini contoh hasil sablon kami:<br><div class="sp-img-carousel"><img src="asset/hasil jasa sablon/evos.jpeg"><img src="asset/hasil jasa sablon/erigo.jpeg"><img src="asset/hasil jasa sablon/hara.jpeg"><img src="asset/hasil jasa sablon/dreamstory.jpeg"></div><a href="portfolio.html">Lihat semua portfolio →</a>'},
 ];
 
-const SP_QUICK = ['Harga polymailer?','Cara order?','MOQ minimum?','Jasa sablon?','PUTIH LW?','Hubungi WA'];
+const SP_QUICK = ['Harga polymailer?','Cara order?','MOQ minimum?','Jasa sablon?','PUTIH LW?','Lihat foto','Hubungi kami'];
 const SP_WELCOME = 'Halo! 👋 Saya asisten <b>Sultan Plastik Bandung</b>. Tanya aja soal produk, harga, cara order, atau apapun — saya bantu!';
 let spOpen = false;
 let spInit = false;
