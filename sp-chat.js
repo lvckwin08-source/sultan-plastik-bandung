@@ -92,29 +92,29 @@ const SP_WELCOME = 'Halo! 👋 Saya asisten <b>Sultan Plastik Bandung</b>. Tanya
 let spOpen = false;
 let spInit = false;
 
-function spToggleChat(){
+window.spToggleChat=function(){
   spOpen = !spOpen;
   document.getElementById('sp-chat-box').classList.toggle('open', spOpen);
   if(!spInit){spInit=true;spBotMsg(SP_WELCOME);spShowQuick();}
 }
 
-function spBotMsg(txt){
+window.spBotMsg=function(txt){
   const d=document.createElement('div');d.className='sp-msg sp-msg-bot';d.innerHTML=txt;
   document.getElementById('sp-chat-msgs').appendChild(d);
   d.parentElement.scrollTop=d.parentElement.scrollHeight;
 }
 
-function spUserMsg(txt){
+window.spUserMsg=function(txt){
   const d=document.createElement('div');d.className='sp-msg sp-msg-user';d.textContent=txt;
   document.getElementById('sp-chat-msgs').appendChild(d);
   d.parentElement.scrollTop=d.parentElement.scrollHeight;
 }
 
-function spScrollQ(dir){
+window.spScrollQ=function(dir){
   const el=document.getElementById('sp-chat-quick');
   el.scrollLeft+=dir*120;
 }
-function spShowQuick(){
+window.spShowQuick=function(){
   const wrap=document.getElementById('sp-chat-quick');wrap.innerHTML='';
   SP_QUICK.forEach(q=>{
     const b=document.createElement('button');b.className='sp-quick-btn';b.textContent=q;
@@ -123,7 +123,7 @@ function spShowQuick(){
   });
 }
 
-function spSend(){
+window.spSend=function(){
   const inp=document.getElementById('sp-chat-input');
   const txt=inp.value.trim();if(!txt)return;
   spUserMsg(txt);inp.value='';
@@ -131,7 +131,7 @@ function spSend(){
   setTimeout(()=>spReply(txt),500);
 }
 
-function spReply(txt){
+window.spReply=function(txt){
   const low=txt.toLowerCase();
   let best=null,bestScore=0;
   SP_KB.forEach(item=>{
