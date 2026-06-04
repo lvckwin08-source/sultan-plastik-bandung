@@ -493,8 +493,9 @@ function toggleFaq(btn) {
 #sp-chat-input:focus{border-color:#C8A84B}
 #sp-chat-send{background:#C8A84B;border:none;border-radius:8px;padding:0 14px;cursor:pointer;display:flex;align-items:center}
 #sp-chat-send svg{width:18px;height:18px;fill:#1a1a1a}
-#sp-chat-quick{padding:0 16px 12px;display:flex;flex-wrap:wrap;gap:6px}
-.sp-quick-btn{background:#2a2a2a;border:1px solid rgba(200,168,75,.25);color:#C8A84B;padding:6px 12px;border-radius:20px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .15s}
+#sp-chat-quick{padding:0 16px 12px;display:flex;flex-wrap:nowrap;gap:5px;overflow-x:auto;scroll-snap-type:x mandatory}
+#sp-chat-quick::-webkit-scrollbar{height:0;display:none}
+.sp-quick-btn{background:#2a2a2a;border:1px solid rgba(200,168,75,.25);color:#C8A84B;padding:4px 10px;border-radius:20px;font-size:8px;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;flex-shrink:0;scroll-snap-align:start}
 .sp-quick-btn:hover{background:#C8A84B;color:#1a1a1a}
 @keyframes spFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:480px){#sp-chat-box{width:calc(100vw - 32px);right:16px;bottom:88px;max-height:70vh}}
@@ -542,7 +543,7 @@ const SP_KB = [
   {k:['halo','hai','hi','hello','hey','pagi','siang','sore','malam','assalamualaikum'],a:'Halo! 👋 Selamat datang di <b>Sultan Plastik Bandung</b>. Ada yang bisa kami bantu? Tanya aja soal produk, harga, atau cara order!'},
   {k:['moulding','screen','film'],a:'<b>Moulding/Screen sablon</b> kami simpan setelah order pertama. Reorder desain yang sama = <b>langsung produksi, gak perlu bikin moulding baru</b> (gratis!).'},
   {k:['desain','format','file','ai','psd'],a:'Format desain yang diterima: <b>AI, PSD, PDF</b>, atau JPG/PNG resolusi tinggi (min 300dpi). Konsul desain gratis sebelum produksi!'},
-  {k:['foto','gambar','picture','image','lihat','liat','show','poto'],a:'Ini beberapa produk kami:<br><div class="sp-img-carousel"><img src="asset/foto putih LW/service-putih-lw-02.jpeg"><img src="asset/Portofolio/porto-01.jpeg"><img src="asset/Portofolio/porto-02.jpeg"><img src="asset/Portofolio/porto-03.jpeg"></div><b>Polymailer PUTIH LW</b> — Signature double layer 0.6 micron<br><br>Mau lihat lebih banyak? <a href="portfolio.html">Lihat Portfolio →</a>'},
+  {k:['foto','gambar','picture','image','lihat','liat','show','poto','real pic','real','pic','kirim foto','minta foto','real pict'],a:'Ini beberapa produk kami:<br><div class="sp-img-carousel"><img src="asset/foto putih LW/service-putih-lw-02.jpeg"><img src="asset/Portofolio/porto-01.jpeg"><img src="asset/Portofolio/porto-02.jpeg"><img src="asset/Portofolio/porto-03.jpeg"></div><b>Polymailer PUTIH LW</b> — Signature double layer 0.6 micron<br><br>Mau lihat lebih banyak? <a href="portfolio.html">Lihat Portfolio →</a>'},
   {k:['hasil sablon','contoh sablon','sablon result'],a:'Ini contoh hasil sablon kami:<br><div class="sp-img-carousel"><img src="asset/hasil jasa sablon/evos.jpeg"><img src="asset/hasil jasa sablon/erigo.jpeg"><img src="asset/hasil jasa sablon/hara.jpeg"><img src="asset/hasil jasa sablon/dreamstory.jpeg"></div><a href="portfolio.html">Lihat semua portfolio →</a>'},
 ];
 
@@ -597,7 +598,7 @@ function spReply(txt){
   if(best){
     spBotMsg(best.a);
   } else {
-    spBotMsg('Terima kasih atas pertanyaannya! Untuk jawaban lebih detail, langsung chat tim kami ya 😊<br><br><a href="https://wa.me/6281947931800?text=Halo%20Sultan%20Plastik" target="_blank">💬 Chat WhatsApp</a>');
+    spBotMsg('Terima kasih atas pertanyaannya! Untuk jawaban lebih detail, langsung chat tim kami ya 😊<br><br><a href="https://wa.me/6281947931800?text='+encodeURIComponent('Halo Sultan Plastik, '+txt)+'" target="_blank">💬 Chat WhatsApp</a>');
   }
   setTimeout(spShowQuick, 300);
 }
