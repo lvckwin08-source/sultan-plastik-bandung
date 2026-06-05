@@ -1,4 +1,24 @@
 
+/* IMAGE HOVER EFFECTS */
+.portfolio-grid img,
+.testi-card img,
+[style*="overflow:hidden"] img,
+[style*="overflow: hidden"] img,
+section img[style*="object-fit:cover"],
+section img[style*="object-fit: cover"]{
+  transition:transform .4s ease,filter .4s ease;
+}
+.portfolio-grid img:hover,
+.testi-card img:hover,
+[style*="overflow:hidden"] img:hover,
+[style*="overflow: hidden"] img:hover,
+section img[style*="object-fit:cover"]:hover,
+section img[style*="object-fit: cover"]:hover{
+  transform:scale(1.06);
+  filter:brightness(1.08);
+}
+
+
 /* SCROLL ANIMATIONS */
 .fade-up{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease}
 .fade-up.visible{opacity:1;transform:translateY(0)}
