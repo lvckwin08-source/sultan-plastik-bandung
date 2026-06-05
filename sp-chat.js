@@ -4,7 +4,7 @@ var style=document.createElement('style');
 style.textContent=`#sp-chat-btn{position:fixed;bottom:20px;right:20px;padding:8px 16px;border-radius:30px;background:#C8A84B;border:none;cursor:pointer;box-shadow:0 4px 16px rgba(200,168,75,.4);z-index:9999;display:flex;align-items:center;gap:6px;transition:transform .2s;font-family:Manrope,sans-serif}
 #sp-chat-btn:hover{transform:scale(1.05)}
 #sp-chat-btn svg{width:16px;height:16px;fill:#1a1a1a}
-#sp-chat-btn span{font-size:11px;font-weight:700;color:#1a1a1a}
+#sp-chat-btn span{font-size:13px;font-weight:700;color:#1a1a1a}
 #sp-chat-box{position:fixed;bottom:56px;right:24px;width:370px;max-height:88vh;background:#1a1a1a;border:1px solid rgba(200,168,75,.3);border-radius:16px;z-index:9999;display:none;flex-direction:column;overflow:hidden;box-shadow:0 12px 48px rgba(0,0,0,.5);font-family:'Manrope',sans-serif}
 #sp-chat-box.open{display:flex}
 #sp-chat-head{background:#111;padding:16px 20px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(200,168,75,.2)}
@@ -14,7 +14,7 @@ style.textContent=`#sp-chat-btn{position:fixed;bottom:20px;right:20px;padding:8p
 #sp-chat-head-status{font-size:11px;color:rgba(245,245,242,.5)}
 #sp-chat-close{background:none;border:none;color:rgba(245,245,242,.5);cursor:pointer;font-size:20px;padding:4px}
 #sp-chat-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;max-height:75vh;min-height:400px}
-.sp-msg{max-width:85%;padding:8px 12px;border-radius:12px;font-size:8px;line-height:1.5;animation:spFade .3s ease}
+.sp-msg{max-width:85%;padding:10px 14px;border-radius:12px;font-size:12px;line-height:1.5;animation:spFade .3s ease}
 .sp-msg-bot{background:#2a2a2a;color:#f5f5f2;border-bottom-left-radius:4px;align-self:flex-start}
 .sp-msg-user{background:#C8A84B;color:#1a1a1a;border-bottom-right-radius:4px;align-self:flex-end;font-weight:500}
 .sp-msg-bot a{color:#C8A84B;text-decoration:underline}
@@ -23,7 +23,7 @@ style.textContent=`#sp-chat-btn{position:fixed;bottom:20px;right:20px;padding:8p
 .sp-img-carousel::-webkit-scrollbar{height:3px}
 .sp-img-carousel::-webkit-scrollbar-thumb{background:#C8A84B;border-radius:2px}
 #sp-chat-input-wrap{padding:12px 16px;border-top:1px solid rgba(200,168,75,.15);display:flex;gap:8px;background:#111}
-#sp-chat-input{flex:1;background:#2a2a2a;border:1px solid rgba(200,168,75,.2);border-radius:8px;padding:10px 14px;color:#f5f5f2;font-size:13px;font-family:inherit;outline:none;resize:none}
+#sp-chat-input{flex:1;background:#2a2a2a;border:1px solid rgba(200,168,75,.2);border-radius:8px;padding:10px 14px;color:#f5f5f2;font-size:14px;font-family:inherit;outline:none;resize:none}
 #sp-chat-input::placeholder{color:rgba(245,245,242,.3)}
 #sp-chat-input:focus{border-color:#C8A84B}
 #sp-chat-send{background:#C8A84B;border:none;border-radius:8px;padding:0 14px;cursor:pointer;display:flex;align-items:center}
@@ -32,7 +32,7 @@ style.textContent=`#sp-chat-btn{position:fixed;bottom:20px;right:20px;padding:8p
 #sp-chat-quick{display:flex;flex-wrap:nowrap;gap:5px;overflow-x:hidden;scroll-behavior:smooth;flex:1}
 .sp-q-arrow{background:none;border:1px solid rgba(200,168,75,.3);color:#C8A84B;width:20px;height:20px;border-radius:50%;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;font-family:inherit}
 .sp-q-arrow:hover{background:#C8A84B;color:#1a1a1a}
-.sp-quick-btn{background:#2a2a2a;border:1px solid rgba(200,168,75,.25);color:#C8A84B;padding:4px 10px;border-radius:20px;font-size:8px;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;flex-shrink:0;scroll-snap-align:start}
+.sp-quick-btn{background:#2a2a2a;border:1px solid rgba(200,168,75,.25);color:#C8A84B;padding:4px 10px;border-radius:20px;font-size:10px;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;flex-shrink:0;scroll-snap-align:start}
 .sp-quick-btn:hover{background:#C8A84B;color:#1a1a1a}
 @keyframes spFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:480px){#sp-chat-box{width:calc(100vw - 32px);right:16px;bottom:88px;max-height:70vh}}`;
