@@ -212,3 +212,40 @@ const SULTAN_CONFIG = {
     });
 
 })();
+
+// HAMBURGER MENU
+(function(){
+  const nav = document.querySelector('.nav-inner');
+  if(!nav) return;
+  
+  // Create hamburger button
+  const btn = document.createElement('button');
+  btn.className = 'nav-hamburger';
+  btn.innerHTML = '<span></span><span></span><span></span>';
+  btn.setAttribute('aria-label','Menu');
+  nav.appendChild(btn);
+  
+  // Create overlay
+  const overlay = document.createElement('div');
+  overlay.className = 'nav-mobile-overlay';
+  document.body.appendChild(overlay);
+  
+  const links = document.querySelector('.nav-links');
+  
+  function toggleMenu(){
+    btn.classList.toggle('active');
+    links.classList.toggle('mobile-open');
+    overlay.classList.toggle('show');
+    document.body.style.overflow = links.classList.contains('mobile-open') ? 'hidden' : '';
+  }
+  
+  btn.addEventListener('click', toggleMenu);
+  overlay.addEventListener('click', toggleMenu);
+  
+  // Close on link click
+  links.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      if(links.classList.contains('mobile-open')) toggleMenu();
+    });
+  });
+})();
