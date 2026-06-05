@@ -109,15 +109,14 @@
                 <div>
                     <label style="font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;color:var(--amber-dark);font-weight:700;display:block;margin-bottom:8px;">JENIS PRODUK</label>
                     <select id="calc-produk" onchange="calcUpdateSizes();calcUpdate()" style="width:100%;padding:14px 16px;font-size:14px;border:2px solid var(--ink);background:var(--base);font-family:inherit;cursor:pointer;">
-                        <option value="putih-lw">Polymailer PUTIH LW 06 (Signature)</option>
+                        <option value="putih-lw">Polymailer PUTIH LW (0.6 Micron)</option>
                         <option value="putih-05">Polymailer Putih 05 Micron</option>
-                        <option value="silver">Polymailer Silver 05 Micron</option>
-                        <option value="hitam">Polymailer Hitam HD 045</option>
-                        <option value="pink">Polymailer Baby Pink 05 Micron</option>
+                        <option value="warna-a">Polymailer Warna Grade A (0.5 Micron)</option>
+                        <option value="warna-b">Polymailer Warna Grade B (0.5 Micron)</option>
                         <option value="klip-polos">Plastik Klip Polos</option>
                         <option value="klip-pond">Plastik Klip Pond</option>
-                        <option value="zipper-a">Zipper Bag Grade A (Portrait)</option>
-                        <option value="zipper-b">Zipper Bag Grade B (Landscape)</option>
+                        <option value="zipper-a">Zipper Bag Grade A</option>
+                        <option value="zipper-b">Zipper Bag Grade B</option>
                         <option value="opp">Plastik OPP</option>
                     </select>
                 </div>
@@ -177,9 +176,8 @@
 var CALC_PRICES = {
     'putih-lw': {'17x28':385,'20x30':480,'25x35':570,'30x40':800,'35x45':1050,'35x50':1100,'38x45':1100,'40x50':1100},
     'putih-05': {'17x30':364,'20x30':403,'20x40':494,'25x35':572,'25x40':500,'30x40':600,'30x45':670,'35x50':800,'40x50':1170,'40x60':1560,'45x60':1365,'50x60':1500,'55x65':2275},
-    'silver': {'17x30':364,'17x35':240,'20x30':403,'20x35':310,'20x40':494,'25x35':572,'25x40':440,'30x40':600,'35x50':780,'40x50':1050,'40x60':1365,'50x60':1500},
-    'hitam': {'10x20':119,'16x20':150,'17x30':281,'17x35':214,'20x30':215,'20x35':275,'20x40':331,'25x30':318,'25x35':357,'25x40':344,'30x40':400,'30x50':525,'35x50':565,'40x50':520,'40x55':775,'40x60':1200,'45x60':1600,'50x60':1700},
-    'pink': {'17x28':310,'17x30':364,'20x30':403,'20x35':450,'20x40':494,'25x35':572,'25x40':702,'30x40':789,'35x50':1170,'40x50':1200,'40x60':1365,'50x60':1560},
+    'warna-a': {'17x30':364,'20x30':403,'20x40':494,'25x35':572,'25x40':702,'30x40':819,'35x50':1170,'40x50':1200,'40x60':1365,'50x60':1560},
+    'warna-b': {'10x20':119,'16x20':150,'17x30':240,'17x35':240,'20x30':280,'20x35':310,'20x40':331,'25x30':318,'25x35':357,'25x40':410,'30x40':500,'30x50':525,'35x50':632,'40x50':775,'40x60':1200,'50x60':1500},
     'klip-polos': {'20x30':681,'25x35':650,'28x35':713,'30x40':1187,'35x40':1050},
     'klip-pond': {'20x30':824,'25x35':1083,'28x35':926,'30x38':1250,'30x40':1515,'35x40':1500,'35x45':1200},
     'zipper-a': {'10x15':700,'15x20':850,'17x25':1300,'20x28':1450,'20x30':1450,'24x35':1850,'28x35':2400,'28x40':2500,'30x40':2500,'35x40':2800,'35x45':2800,'40x50':3500},
