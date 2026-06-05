@@ -1,3 +1,17 @@
+
+/* SCROLL ANIMATIONS */
+.fade-up{opacity:0;transform:translateY(40px);transition:opacity .7s ease,transform .7s ease}
+.fade-up.visible{opacity:1;transform:translateY(0)}
+.fade-left{opacity:0;transform:translateX(-40px);transition:opacity .7s ease,transform .7s ease}
+.fade-left.visible{opacity:1;transform:translateX(0)}
+.fade-right{opacity:0;transform:translateX(40px);transition:opacity .7s ease,transform .7s ease}
+.fade-right.visible{opacity:1;transform:translateX(0)}
+.scale-in{opacity:0;transform:scale(0.9);transition:opacity .6s ease,transform .6s ease}
+.scale-in.visible{opacity:1;transform:scale(1)}
+
+/* COUNTER ANIMATION */
+.stat-number{font-family:var(--font-display);font-size:48px;color:var(--amber-dark)}
+
 /* === SULTAN PLASTIK — SHARED STYLES === */
 
 :root {

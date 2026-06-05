@@ -249,3 +249,65 @@ const SULTAN_CONFIG = {
     });
   });
 })();
+
+// SCROLL ANIMATIONS
+(function(){
+  // Auto-add fade-up class to sections, cards, headings
+  document.querySelectorAll('.section > .container > h2, .section > .container > .section-label, .testi-card, .compare-table, .faq-list, .info-box, .product-card, [style*="display: grid"] > div, [style*="display:grid"] > div').forEach(function(el,i){
+    if(!el.classList.contains('fade-up') && !el.classList.contains('fade-left') && !el.classList.contains('fade-right')){
+      el.classList.add('fade-up');
+      el.style.transitionDelay = (i % 4) * 0.1 + 's';
+    }
+  });
+
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('visible');
+      }
+    });
+  },{threshold:0.15,rootMargin:'0px 0px -50px 0px'});
+
+  document.querySelectorAll('.fade-up,.fade-left,.fade-right,.scale-in').forEach(function(el){
+    observer.observe(el);
+  });
+})();
+
+// COUNTER ANIMATION
+(function(){
+  var counted = false;
+  function animateCounter(el, target, suffix){
+    var start = 0;
+    var duration = 2000;
+    var step = Math.ceil(target / (duration / 16));
+    var current = 0;
+    var timer = setInterval(function(){
+      current += step;
+      if(current >= target){
+        current = target;
+        clearInterval(timer);
+      }
+      el.textContent = current.toLocaleString('id-ID') + (suffix || '');
+    }, 16);
+  }
+
+  // Find elements that look like stats (numbers with + or text)
+  var statObserver = new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting && !counted){
+        counted = true;
+        // Find stat numbers in the visible section
+        document.querySelectorAll('[data-count]').forEach(function(el){
+          var target = parseInt(el.getAttribute('data-count'));
+          var suffix = el.getAttribute('data-suffix') || '';
+          animateCounter(el, target, suffix);
+        });
+      }
+    });
+  },{threshold:0.3});
+
+  // Auto-detect stat-like elements
+  document.querySelectorAll('.stats-grid .stat-number, [class*="stat"] [class*="number"]').forEach(function(el){
+    statObserver.observe(el);
+  });
+})();
