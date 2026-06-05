@@ -97,6 +97,136 @@
             </div>
         </div>
     </div>
+
+<section class="section" style="background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
+    <div class="container">
+        <div class="section-label"><span><span class="section-num">TOOLS</span> — ESTIMASI</span></div>
+        <h2 class="display display-l" style="margin-bottom:16px;">Kalkulator<br><span style="color:var(--amber-dark);">harga.</span></h2>
+        <p class="lede" style="max-width:600px;margin-bottom:48px;">Hitung estimasi harga polymailer + sablon. Harga final bisa berbeda tergantung detail project — konsul WA untuk quote akurat.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;">
+            <div style="display:flex;flex-direction:column;gap:20px;">
+                <div>
+                    <label style="font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;color:var(--amber-dark);font-weight:700;display:block;margin-bottom:8px;">JENIS PRODUK</label>
+                    <select id="calc-produk" onchange="calcUpdateSizes();calcUpdate()" style="width:100%;padding:14px 16px;font-size:14px;border:2px solid var(--ink);background:var(--base);font-family:inherit;cursor:pointer;">
+                        <option value="putih-lw">Polymailer PUTIH LW 06 (Signature)</option>
+                        <option value="putih-05">Polymailer Putih 05 Micron</option>
+                        <option value="silver">Polymailer Silver 05 Micron</option>
+                        <option value="hitam">Polymailer Hitam HD 045</option>
+                        <option value="pink">Polymailer Baby Pink 05 Micron</option>
+                        <option value="klip-pond">Plastik Klip Pond 06</option>
+                        <option value="zipper-bag">Zipper Bag</option>
+                        <option value="opp">Plastik OPP</option>
+                    </select>
+                </div>
+                <div>
+                    <label style="font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;color:var(--amber-dark);font-weight:700;display:block;margin-bottom:8px;">UKURAN</label>
+                    <select id="calc-ukuran" onchange="calcUpdate()" style="width:100%;padding:14px 16px;font-size:14px;border:2px solid var(--ink);background:var(--base);font-family:inherit;cursor:pointer;">
+                    </select>
+                </div>
+                <div>
+                    <label style="font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;color:var(--amber-dark);font-weight:700;display:block;margin-bottom:8px;">QUANTITY (PCS)</label>
+                    <input id="calc-qty" type="number" value="1000" min="100" step="100" onchange="calcUpdate()" oninput="calcUpdate()" style="width:100%;padding:14px 16px;font-size:14px;border:2px solid var(--ink);background:var(--base);font-family:inherit;">
+                </div>
+                <div>
+                    <label style="font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;color:var(--amber-dark);font-weight:700;display:block;margin-bottom:8px;">SABLON</label>
+                    <select id="calc-sablon" onchange="calcUpdate()" style="width:100%;padding:14px 16px;font-size:14px;border:2px solid var(--ink);background:var(--base);font-family:inherit;cursor:pointer;">
+                        <option value="0">Tanpa Sablon</option>
+                        <option value="1" selected>1 Warna — Rp 150/pcs</option>
+                        <option value="2">2 Warna — Rp 275/pcs</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="background:var(--ink);padding:40px;color:var(--base);position:sticky;top:100px;">
+                <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;color:var(--amber);font-weight:700;margin-bottom:24px;">ESTIMASI HARGA</div>
+                
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(245,245,242,.1);font-size:14px;">
+                    <span>Harga/pcs</span>
+                    <span id="calc-harga-pcs" style="font-weight:700;color:var(--amber);">Rp 520</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(245,245,242,.1);font-size:14px;">
+                    <span>Sablon/pcs</span>
+                    <span id="calc-sablon-pcs" style="font-weight:700;color:var(--amber);">Rp 75</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(245,245,242,.1);font-size:14px;">
+                    <span>Moulding</span>
+                    <span id="calc-moulding" style="font-weight:700;color:var(--amber);">GRATIS</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(245,245,242,.1);font-size:14px;">
+                    <span>Quantity</span>
+                    <span id="calc-qty-display" style="font-weight:700;">1.000 pcs</span>
+                </div>
+
+                <div style="margin-top:24px;padding-top:24px;border-top:2px solid var(--amber);">
+                    <div style="font-family:var(--font-mono);font-size:11px;color:rgba(245,245,242,.5);margin-bottom:4px;">ESTIMASI TOTAL</div>
+                    <div id="calc-total" style="font-family:var(--font-display);font-size:36px;color:var(--amber);letter-spacing:.02em;">Rp 595.000</div>
+                </div>
+
+                <div style="margin-top:8px;font-size:11px;color:rgba(245,245,242,.4);line-height:1.5;">* Estimasi. Harga final tergantung detail project. Konsul WA untuk quote akurat.</div>
+
+                <a href="https://wa.me/6281947931800?text=Halo%20Sultan%20Plastik%2C%20mau%20order%20polymailer" target="_blank" style="display:block;margin-top:24px;padding:16px;background:var(--amber);color:var(--ink);text-align:center;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:.03em;">💬 KONSUL + ORDER VIA WHATSAPP</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+var CALC_PRICES = {
+    'putih-lw': {'17x28':385,'20x30':480,'25x35':570,'30x40':800,'35x45':1050,'35x50':1100,'38x45':1100,'40x50':1100},
+    'putih-05': {'17x30':364,'20x30':403,'20x40':494,'25x35':572,'25x40':500,'30x40':600,'30x45':670,'35x50':800,'40x50':1170,'40x60':1560,'45x60':1365,'50x60':1500,'55x65':2275},
+    'silver': {'17x30':364,'17x35':240,'20x30':403,'20x35':310,'20x40':494,'25x35':572,'25x40':440,'30x40':600,'35x50':780,'40x50':1050,'40x60':1365,'50x60':1500},
+    'hitam': {'10x20':119,'16x20':150,'17x30':281,'17x35':214,'20x30':215,'20x35':275,'20x40':331,'25x30':318,'25x35':357,'25x40':344,'30x40':400,'30x50':525,'35x50':565,'40x50':520,'40x55':775,'40x60':1200,'45x60':1600,'50x60':1700},
+    'pink': {'17x28':310,'17x30':364,'20x30':403,'20x35':450,'20x40':494,'25x35':572,'25x40':702,'30x40':789,'35x50':1170,'40x50':1200,'40x60':1365,'50x60':1560},
+    'klip-pond': {'20x30':831,'25x35':1083,'28x35':1499,'30x38':1100,'30x40':1563,'35x40':1996,'35x45':1200},
+    'zipper-bag': {'10x15':700,'15x20':850,'17x25':1300,'20x15':1150,'20x28':1500,'20x30':1450,'24x35':1850,'25x17':1300,'28x20':1500,'28x35':2400,'28x40':2500,'30x40':2500,'35x40':2800,'35x45':2800,'40x50':3500},
+    'opp': {'10x25':105,'13x25':126,'15x25':280,'18x25':300,'20x30':293,'23x35':300,'25x35':390,'28x35':360,'30x37':390,'30x40':550,'35x40':465,'35x50':632}
+};
+var SABLON_MAP = {0:0, 1:150, 2:275};
+function calcUpdate(){
+    var produk = document.getElementById('calc-produk').value;
+    var ukuran = document.getElementById('calc-ukuran').value;
+    var qty = parseInt(document.getElementById('calc-qty').value) || 0;
+    var sablon = parseInt(document.getElementById('calc-sablon').value) || 0;
+    var hargaPcs = CALC_PRICES[produk]?.[ukuran] || 0;
+    var sablonPcs = SABLON_MAP[sablon] || 0;
+    var moulding = (qty >= 1000 || sablon === 0) ? 0 : 125000;
+    var total = (hargaPcs + sablonPcs) * qty + moulding;
+    document.getElementById('calc-harga-pcs').textContent = 'Rp ' + hargaPcs.toLocaleString('id-ID');
+    document.getElementById('calc-sablon-pcs').textContent = sablon > 0 ? 'Rp ' + sablonPcs.toLocaleString('id-ID') : '-';
+    document.getElementById('calc-moulding').textContent = moulding === 0 ? (sablon > 0 ? 'GRATIS' : '-') : 'Rp 125.000';
+    document.getElementById('calc-qty-display').textContent = qty.toLocaleString('id-ID') + ' pcs';
+    document.getElementById('calc-total').textContent = 'Rp ' + total.toLocaleString('id-ID');
+}
+var SIZE_LABELS = {
+    '10x15':'10 × 15','10x20':'10 × 20','10x25':'10 × 25','13x25':'13 × 25',
+    '15x20':'15 × 20','15x25':'15 × 25','16x20':'16 × 20',
+    '17x25':'17 × 25','17x28':'17 × 28','17x30':'17 × 30','17x35':'17 × 35',
+    '18x25':'18 × 25','20x15':'20 × 15','20x28':'20 × 28','20x30':'20 × 30',
+    '20x35':'20 × 35','20x40':'20 × 40','23x35':'23 × 35',
+    '24x35':'24 × 35','25x15':'25 × 15','25x17':'25 × 17','25x30':'25 × 30',
+    '25x35':'25 × 35','25x40':'25 × 40','28x20':'28 × 20','28x35':'28 × 35',
+    '28x40':'28 × 40','30x37':'30 × 37.5','30x38':'30 × 38','30x40':'30 × 40',
+    '30x45':'30 × 45','30x50':'30 × 50','35x40':'35 × 40','35x45':'35 × 45',
+    '35x50':'35 × 50','38x45':'38 × 45','40x50':'40 × 50','40x55':'40 × 55',
+    '40x60':'40 × 60','45x60':'45 × 60','50x60':'50 × 60','55x65':'55 × 65'
+};
+function calcUpdateSizes(){
+    var produk = document.getElementById('calc-produk').value;
+    var sizes = Object.keys(CALC_PRICES[produk] || {});
+    var sel = document.getElementById('calc-ukuran');
+    sel.innerHTML = '';
+    sizes.forEach(function(s){
+        var opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = SIZE_LABELS[s] || s;
+        sel.appendChild(opt);
+    });
+}
+document.addEventListener('DOMContentLoaded', function(){ calcUpdateSizes(); calcUpdate(); });
+</script>
+
+
 </section>
 
 <section class="section" style="background: var(--surface); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);">
@@ -204,131 +334,6 @@
 </section>
 
 
-<section class="section" style="background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line);">
-    <div class="container">
-        <div class="section-label"><span><span class="section-num">TOOLS</span> — ESTIMASI</span></div>
-        <h2 class="display display-l" style="margin-bottom:16px;">Kalkulator<br><span style="color:var(--amber-dark);">harga.</span></h2>
-        <p class="lede" style="max-width:600px;margin-bottom:48px;">Hitung estimasi harga polymailer + sablon. Harga final bisa berbeda tergantung detail project — konsul WA untuk quote akurat.</p>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;">
-            <div style="display:flex;flex-direction:column;gap:20px;">
-                <div>
-                    <label style="font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;color:var(--amber-dark);font-weight:700;display:block;margin-bottom:8px;">JENIS PRODUK</label>
-                    <select id="calc-produk" onchange="calcUpdateSizes();calcUpdate()" style="width:100%;padding:14px 16px;font-size:14px;border:2px solid var(--ink);background:var(--base);font-family:inherit;cursor:pointer;">
-                        <option value="putih-lw">Polymailer PUTIH LW 06 (Signature)</option>
-                        <option value="putih-05">Polymailer Putih 05 Micron</option>
-                        <option value="silver">Polymailer Silver 05 Micron</option>
-                        <option value="hitam">Polymailer Hitam HD 045</option>
-                        <option value="pink">Polymailer Baby Pink 05 Micron</option>
-                        <option value="klip-pond">Plastik Klip Pond 06</option>
-                        <option value="zipper-bag">Zipper Bag</option>
-                        <option value="opp">Plastik OPP</option>
-                    </select>
-                </div>
-                <div>
-                    <label style="font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;color:var(--amber-dark);font-weight:700;display:block;margin-bottom:8px;">UKURAN</label>
-                    <select id="calc-ukuran" onchange="calcUpdate()" style="width:100%;padding:14px 16px;font-size:14px;border:2px solid var(--ink);background:var(--base);font-family:inherit;cursor:pointer;">
-                    </select>
-                </div>
-                <div>
-                    <label style="font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;color:var(--amber-dark);font-weight:700;display:block;margin-bottom:8px;">QUANTITY (PCS)</label>
-                    <input id="calc-qty" type="number" value="1000" min="100" step="100" onchange="calcUpdate()" oninput="calcUpdate()" style="width:100%;padding:14px 16px;font-size:14px;border:2px solid var(--ink);background:var(--base);font-family:inherit;">
-                </div>
-                <div>
-                    <label style="font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;color:var(--amber-dark);font-weight:700;display:block;margin-bottom:8px;">SABLON</label>
-                    <select id="calc-sablon" onchange="calcUpdate()" style="width:100%;padding:14px 16px;font-size:14px;border:2px solid var(--ink);background:var(--base);font-family:inherit;cursor:pointer;">
-                        <option value="0">Tanpa Sablon</option>
-                        <option value="1" selected>1 Warna</option>
-                        <option value="2">2 Warna</option>
-                        <option value="3">3 Warna</option>
-                        <option value="4">4 Warna</option>
-                        <option value="5">5 Warna</option>
-                        <option value="6">6 Warna</option>
-                    </select>
-                </div>
-            </div>
-
-            <div style="background:var(--ink);padding:40px;color:var(--base);position:sticky;top:100px;">
-                <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:.15em;color:var(--amber);font-weight:700;margin-bottom:24px;">ESTIMASI HARGA</div>
-                
-                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(245,245,242,.1);font-size:14px;">
-                    <span>Harga/pcs</span>
-                    <span id="calc-harga-pcs" style="font-weight:700;color:var(--amber);">Rp 520</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(245,245,242,.1);font-size:14px;">
-                    <span>Sablon/pcs</span>
-                    <span id="calc-sablon-pcs" style="font-weight:700;color:var(--amber);">Rp 75</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(245,245,242,.1);font-size:14px;">
-                    <span>Moulding</span>
-                    <span id="calc-moulding" style="font-weight:700;color:var(--amber);">GRATIS</span>
-                </div>
-                <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(245,245,242,.1);font-size:14px;">
-                    <span>Quantity</span>
-                    <span id="calc-qty-display" style="font-weight:700;">1.000 pcs</span>
-                </div>
-
-                <div style="margin-top:24px;padding-top:24px;border-top:2px solid var(--amber);">
-                    <div style="font-family:var(--font-mono);font-size:11px;color:rgba(245,245,242,.5);margin-bottom:4px;">ESTIMASI TOTAL</div>
-                    <div id="calc-total" style="font-family:var(--font-display);font-size:36px;color:var(--amber);letter-spacing:.02em;">Rp 595.000</div>
-                </div>
-
-                <div style="margin-top:8px;font-size:11px;color:rgba(245,245,242,.4);line-height:1.5;">* Estimasi. Harga final tergantung detail project. Konsul WA untuk quote akurat.</div>
-
-                <a href="https://wa.me/6281947931800?text=Halo%20Sultan%20Plastik%2C%20mau%20order%20polymailer" target="_blank" style="display:block;margin-top:24px;padding:16px;background:var(--amber);color:var(--ink);text-align:center;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:.03em;">💬 KONSUL + ORDER VIA WHATSAPP</a>
-            </div>
-        </div>
-    </div>
-</section>
-
-<script>
-var CALC_PRICES = {
-    'putih-lw': {'20x30':520,'25x35':680,'30x40':900,'35x45':1150},
-    'putih-05': {'17x30':280,'20x30':403,'25x35':470,'25x40':500,'30x40':600,'35x50':950},
-    'silver': {'17x30':280,'20x30':350,'25x35':450,'25x40':440,'30x40':600},
-    'hitam': {'17x30':200,'20x30':250,'25x35':330,'30x40':450,'35x45':580},
-    'pink': {'17x30':364,'20x30':403,'25x35':572,'30x40':630},
-    'klip-pond': {'20x30':760,'25x35':880,'28x35':830},
-    'zipper-bag': {'15x20':850,'20x28':1350,'20x30':1450,'24x35':1850,'35x45':2800},
-    'opp': {'10x25':105,'15x25':150,'18x25':165,'20x30':200,'25x35':293}
-};
-var SABLON_PRICE = 75;
-function calcUpdate(){
-    var produk = document.getElementById('calc-produk').value;
-    var ukuran = document.getElementById('calc-ukuran').value;
-    var qty = parseInt(document.getElementById('calc-qty').value) || 0;
-    var sablon = parseInt(document.getElementById('calc-sablon').value) || 0;
-    var hargaPcs = CALC_PRICES[produk]?.[ukuran] || 0;
-    var sablonPcs = sablon * SABLON_PRICE;
-    var moulding = (qty >= 1000 || sablon === 0) ? 0 : 100000;
-    var total = (hargaPcs + sablonPcs) * qty + moulding;
-    document.getElementById('calc-harga-pcs').textContent = 'Rp ' + hargaPcs.toLocaleString('id-ID');
-    document.getElementById('calc-sablon-pcs').textContent = sablon > 0 ? 'Rp ' + sablonPcs.toLocaleString('id-ID') : '-';
-    document.getElementById('calc-moulding').textContent = moulding === 0 ? (sablon > 0 ? 'GRATIS' : '-') : 'Rp 100.000';
-    document.getElementById('calc-qty-display').textContent = qty.toLocaleString('id-ID') + ' pcs';
-    document.getElementById('calc-total').textContent = 'Rp ' + total.toLocaleString('id-ID');
-}
-var SIZE_LABELS = {
-    '10x25':'10 × 25','13x25':'13 × 25','15x20':'15 × 20','15x25':'15 × 25',
-    '17x30':'17 × 30','18x25':'18 × 25','20x28':'20 × 28','20x30':'20 × 30 + 5',
-    '20x35':'20 × 35','20x40':'20 × 40','24x35':'24 × 35',
-    '25x35':'25 × 35 + 5','25x40':'25 × 40','28x35':'28 × 35',
-    '30x40':'30 × 40 + 5','35x45':'35 × 45 + 5','35x50':'35 × 50'
-};
-function calcUpdateSizes(){
-    var produk = document.getElementById('calc-produk').value;
-    var sizes = Object.keys(CALC_PRICES[produk] || {});
-    var sel = document.getElementById('calc-ukuran');
-    sel.innerHTML = '';
-    sizes.forEach(function(s){
-        var opt = document.createElement('option');
-        opt.value = s;
-        opt.textContent = SIZE_LABELS[s] || s;
-        sel.appendChild(opt);
-    });
-}
-document.addEventListener('DOMContentLoaded', function(){ calcUpdateSizes(); calcUpdate(); });
-</script>
 
 <section class="final-cta">
     <div class="container">
