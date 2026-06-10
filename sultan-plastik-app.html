@@ -356,6 +356,10 @@ tbody tr:hover td{background:#F9F8F4}
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         Laporan Bulanan
       </button>
+      <button class="ni" id="ni-piutang" data-page="piutang" onclick="gp('piutang',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        Piutang Customer
+      </button>
     </nav>
     <div class="sb-foot">
       <div class="sb-role">
@@ -407,7 +411,7 @@ tbody tr:hover td{background:#F9F8F4}
             <div class="stat-val" style="color:#B71C1C" id="d-mrg-delay">Rp 0</div>
             <div class="stat-hint"><span id="d-delay-count">0</span> nota belum/DP</div>
           </div>
-          <div class="stat" style="border-left:4px solid var(--gold)">
+          <div class="stat" style="border-left:4px solid var(--gold);cursor:pointer" onclick="gp('piutang',document.getElementById('ni-piutang'))">
             <div class="stat-lbl">Piutang</div>
             <div class="stat-val gold" id="d-piutang">Rp 0</div>
             <div class="stat-hint">DP: <span id="d-piutang-dp">0</span> · Belum: <span id="d-piutang-belum">0</span></div>
@@ -678,6 +682,37 @@ tbody tr:hover td{background:#F9F8F4}
         </div>
       </div>
 
+      <!-- PIUTANG CUSTOMER -->
+      <div class="page" id="page-piutang">
+        <div class="stats">
+          <div class="stat"><div class="stat-lbl">Total Nota Piutang</div><div class="stat-val" id="piu-count">0</div></div>
+          <div class="stat"><div class="stat-lbl">Total Nilai Piutang</div><div class="stat-val gold" id="piu-total">Rp 0</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Daftar Piutang Belum Lunas</div>
+          <div class="frow">
+            <input class="search" type="text" placeholder="Cari nama customer atau no nota..." oninput="fPiu(this.value)">
+          </div>
+          <div class="tw">
+            <table>
+              <thead>
+                <tr>
+                  <th>No Nota</th>
+                  <th>Tanggal</th>
+                  <th>Customer</th>
+                  <th class="r">Total Tagihan</th>
+                  <th>Status</th>
+                  <th class="admin-only">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tbl-piutang">
+                <tr><td colspan="6" style="text-align:center;padding:24px;color:var(--txt3)">Memuat data piutang...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- LAPORAN KEUANGAN (OWNER ONLY) -->
       <div class="page" id="page-lapkas">
         <div class="frow">
@@ -880,6 +915,12 @@ async function startFirebaseSync(){
     window.fbSaveNota = async(nota) => {
       try{ await setDoc(doc(db,'transaksi',nota.id.replace(/\//g,'_')), nota); }catch(e){ console.error('fbSaveNota:',e); }
     };
+    window.fbSaveProduk = async(p) => {
+      try{ await setDoc(doc(db,'produk',p.k.replace(/\//g,'_')), p); }catch(e){}
+    };
+    window.fbSaveCustomer = async(c) => {
+      try{ await setDoc(doc(db,'customer',c.i.replace(/\//g,'_')), c); }catch(e){}
+    };
     window.fbDeleteNota = async(id) => {
       try{ await deleteDoc(doc(db,'transaksi',id.replace(/\//g,'_'))); }catch(e){}
     };
@@ -1053,6 +1094,7 @@ function doLogin(){
     if(niLap)niLap.style.display='';
     if(lapSec)lapSec.style.display='';
     if(kasSec)kasSec.style.display='none';
+    if(document.getElementById('ni-piutang')) document.getElementById('ni-piutang').style.display='';
     document.querySelectorAll('.sb-sec').forEach(s => {
       if(s.textContent.trim()==='KEUANGAN' || s.textContent.trim()==='Keuangan') s.style.display='';
     });
@@ -1070,6 +1112,7 @@ function doLogin(){
     if(niLap)niLap.style.display='none';        // Admin gak lihat laporan bulanan
     if(lapSec)lapSec.style.display='none';
     if(kasSec)kasSec.style.display='';
+    if(document.getElementById('ni-piutang')) document.getElementById('ni-piutang').style.display='';
     // Go straight to transaksi page
     setTimeout(function(){ gp('transaksi', document.querySelector('[data-page="transaksi"]')); }, 100);
   }
@@ -1120,8 +1163,8 @@ function populateCustSelect(){
 }
 
 // ===== NAVIGATION =====
-const PAGE_TITLES = {dashboard:'Dashboard',transaksi:'Input Transaksi',riwayat:'Riwayat Nota',produk:'Katalog Produk',customer:'Database Customer',laporan:'Laporan Bulanan',kas:'Input Kas Harian',lapkas:'Laporan Keuangan'};
-const PAGE_SUBS = {dashboard:'Ringkasan aktivitas bisnis',transaksi:'Buat nota transaksi baru — multi item per nota',riwayat:'Semua nota transaksi masuk',produk:'467 produk dari database barang',customer:'504 customer terdaftar',laporan:'Analitik & laporan per bulan',kas:'Catat uang masuk & keluar harian',lapkas:'Ringkasan keuangan — omzet, HPP, pengeluaran, profit bersih'};
+const PAGE_TITLES = {dashboard:'Dashboard',transaksi:'Input Transaksi',riwayat:'Riwayat Nota',produk:'Katalog Produk',customer:'Database Customer',laporan:'Laporan Bulanan',kas:'Input Kas Harian',lapkas:'Laporan Keuangan',piutang:'Piutang Customer'};
+const PAGE_SUBS = {dashboard:'Ringkasan aktivitas bisnis',transaksi:'Buat nota transaksi baru — multi item per nota',riwayat:'Semua nota transaksi masuk',produk:'467 produk dari database barang',customer:'504 customer terdaftar',laporan:'Analitik & laporan per bulan',kas:'Catat uang masuk & keluar harian',lapkas:'Ringkasan keuangan — omzet, HPP, pengeluaran, profit bersih',piutang:'Manajemen piutang dan penagihan customer'};
 function gp(p, el){
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
   if(el) el.classList.add('active');
@@ -1134,6 +1177,7 @@ function gp(p, el){
   if(p==='lapkas') renderLapKas();
   if(p==='produk') renderProdTbl('');
   if(p==='customer') renderCustTbl('');
+  if(p==='piutang') renderPiutang();
 }
 
 // ===== CUSTOMER CHANGE =====
@@ -1926,7 +1970,59 @@ function editNota(id){
   toast('Edit nota '+t.id+' — ubah lalu klik Simpan','ok');
 }
 
-// ===== RENDER ALL =====
+// ===== RENDER PIUTANG =====
+function renderPiutang(q=''){
+  const list = transaksi.filter(t => (t.status === 'belum' || t.status === 'dp') && (t.id.toLowerCase().includes(q.toLowerCase()) || t.custNama.toLowerCase().includes(q.toLowerCase())));
+  const tbody = document.getElementById('tbl-piutang');
+  const totalEl = document.getElementById('piu-total');
+  const countEl = document.getElementById('piu-count');
+  
+  let totalPiu = 0;
+  tbody.innerHTML = '';
+  
+  if(list.length === 0){
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--txt3)">Tidak ada piutang pending</td></tr>';
+    totalEl.textContent = 'Rp 0';
+    countEl.textContent = '0';
+    return;
+  }
+  
+  list.forEach(t => {
+    totalPiu += t.total;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="mono">${t.id}</td>
+      <td>${t.tgl}</td>
+      <td><strong>${t.custNama}</strong><br><small style="color:var(--txt3)">${t.custId}</small></td>
+      <td class="r"><strong>${fRp(t.total)}</strong></td>
+      <td>${badge(t.status)}</td>
+      <td class="admin-only">
+        <button class="btn btn-sm btn-green" onclick="setLunas('${t.id}')">Set Lunas</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+  
+  totalEl.textContent = fRp(totalPiu);
+  countEl.textContent = list.length;
+}
+
+function fPiu(v){ renderPiutang(v); }
+
+function setLunas(id){
+  if(!confirm('Yakin ingin menandai nota '+id+' sebagai LUNAS?')) return;
+  const idx = transaksi.findIndex(t => t.id === id);
+  if(idx > -1){
+    transaksi[idx].status = 'lunas';
+    save();
+    fbSaveNota(transaksi[idx]);
+    toast('Nota '+id+' telah dilunaskan','ok');
+    renderPiutang();
+    renderAll();
+  }
+}
+
+// ===== RENDER KAS =====
 function renderAll(){renderDashboard();renderRiwayat();}
 </script>
 </body>
