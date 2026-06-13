@@ -1,16 +1,3 @@
-// GOOGLE ANALYTICS 4
-(function(){
-  var s = document.createElement('script');
-  s.async = true;
-  s.src = 'https://www.googletagmanager.com/gtag/js?id=G-DGFE4D7J0P';
-  document.head.appendChild(s);
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  window.gtag = gtag;
-  gtag('js', new Date());
-  gtag('config', 'G-DGFE4D7J0P');
-})();
-
 /* ==========================================================
    SULTAN PLASTIK — CONFIG FILE
    ==========================================================
@@ -28,8 +15,8 @@ const SULTAN_CONFIG = {
 
     // ====== KONTAK ======
     contact: {
-        // Nomor WA KONSUL (lo sendiri) — untuk tanya-tanya, info produk
-        whatsapp: '6281947931800',
+        // Nomor WA KONSUL (chatbot) — untuk tanya-tanya, info produk
+        whatsapp: '6282129699885',
         whatsappMessage: 'Halo Sultan Plastik, saya mau konsultasi soal polymailer dan jasa sablon.',
 
         // Nomor WA ORDER (admin) — untuk harga & order
@@ -45,9 +32,9 @@ const SULTAN_CONFIG = {
 
     // ====== ALAMAT WORKSHOP ======
     address: {
-        full: 'De Green Villa Mutiara Residence Blok A10, Jl. Ciganitri No.3, Cipagalo, Kec. Bojongsoang, Kabupaten Bandung, Jawa Barat 40287',
-        mapsUrl: 'https://maps.google.com/?q=De+Green+Villa+Mutiara+Residence+Ciganitri+Bandung',
-        mapsEmbed: 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3960.5!2d107.638!3d-6.965!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e9d273c410a7%3A0x73f91c9758f76cd5!2sDe%20Green%20Villa%20Mutiara%20Residence!5e0!3m2!1sid!2sid',
+        full: 'Jl. Contoh No. 123, Kecamatan Contoh, Kota Bandung, Jawa Barat 40000',
+        mapsUrl: 'https://maps.google.com/?q=Sultan+Plastik+Bandung',
+        mapsEmbed: 'https://www.google.com/maps/embed?pb=YOUR_EMBED_CODE_HERE',
     },
 
     // ====== SOCIAL MEDIA ======
@@ -81,57 +68,35 @@ const SULTAN_CONFIG = {
     // ====== TESTIMONI ======
     testimonials: [
         {
-            quote: 'Order klip pond custom buat packaging jersey tim. Kualitas rapi, finishing presisi. Moulding disimpan, reorder tinggal WA langsung produksi.',
-            author: 'EVOS Esports',
-            detail: 'JAKARTA · PLASTIK KLIP POND',
+            quote: 'Respons cepet banget. Order 1000 pcs PUTIH LW + sablon logo, jam 9 pagi konsul, sore quote keluar, 2 hari kemudian barang sampe. Kualitas konsisten.',
+            author: '@namabrand_fashion',
+            detail: 'BANDUNG · REGULAR ORDER',
         },
         {
-            quote: 'Butuh klip pond yang tebal dan rapi buat packaging kaos. Sultan Plastik deliver sesuai spec, on time. Gak perlu cari supplier lain lagi.',
-            author: 'ERIGO',
-            detail: 'JAKARTA · PLASTIK KLIP POND',
+            quote: 'Pertama coba polymailer standard mereka, kualitasnya udah bagus. Lama-lama upgrade ke PUTIH LW, dan gak balik lagi ke supplier lain.',
+            author: '@namabrand_premium',
+            detail: 'BALI · LOYAL 3 TAHUN',
         },
         {
-            quote: 'Mulai dari Dinda Store, sekarang rebrand jadi Dream Story. 3 tahun pakai PUTIH LW, dari awal brand sampai sekarang gak pernah ganti supplier. Kualitasnya konsisten.',
-            author: 'Dream Story (ex-Dinda Store)',
-            detail: 'KUDUS · POLYMAILER PUTIH LW · 3 TAHUN',
+            quote: 'Kami sudah 3 tahun pake Sultan Plastik untuk semua line produk kami. Yang bikin betah: konsistensi kualitas, kecepatan respon, dan fleksibilitas MOQ.',
+            author: '@brand_fashion_bdg',
+            detail: 'BANDUNG · 3 TAHUN',
         },
         {
-            quote: 'Awalnya pakai polymailer standard biasa. Begitu coba PUTIH LW, langsung pindah total. Double layer 0.6 micron emang beda — lebih tebal, lebih premium di tangan customer.',
-            author: 'DOWA',
-            detail: 'YOGYAKARTA · UPGRADE KE PUTIH LW',
-        },
-        {
-            quote: 'Udah 6 tahun kerja bareng. Mulai dari plastik OPP, terus zipper bag, sekarang polymailer juga. Semua kebutuhan packaging satu pintu di Sultan Plastik.',
-            author: 'RUSEL',
-            detail: 'BANDUNG · OPP + ZIPPER BAG + POLYMAILER · 6 TAHUN',
-        },
-        {
-            quote: 'Zipper bag custom dengan sablon logo full color. Hasilnya detail banget, warna gak pudar. 6 tahun reorder terus, moulding masih disimpan.',
-            author: 'HYRUS',
-            detail: 'BANDUNG · ZIPPER BAG CUSTOM · 6 TAHUN',
-        },
-        {
-            quote: 'Dari plastik OPP buat inner packaging sampai polymailer buat kirim ke customer. Satu supplier handle semua, gak ribet. Partner bisnis 6 tahun.',
-            author: 'DELTA',
-            detail: 'BANDUNG · OPP + POLYMAILER · 6 TAHUN',
-        },
-        {
-            quote: 'Dari awal join udah pakai PUTIH LW. 6 tahun gak pernah ganti supplier. Kualitas double layer 0.6 micron konsisten dari dulu sampai sekarang. Sultan Plastik udah kayak partner tetap kami.',
-            author: 'ALOOMNI',
-            detail: 'BANDUNG · POLYMAILER PUTIH LW · 6 TAHUN',
+            quote: 'Awal-awal brand kami baru launch, MOQ kami cuma 500 pcs. Sultan Plastik bisa terima dan tetep kasih kualitas full. Sekarang brand kami udah scale, masih order ke mereka.',
+            author: '@indielabel_jkt',
+            detail: 'JAKARTA · SEJAK 2022',
         },
     ],
 
     // ====== BRAND PARTNERS (marquee homepage) ======
     partnerBrands: [
-        'EVOS ESPORTS',
-        'ERIGO',
-        'DREAM STORY',
-        'DOWA',
-        'RUSEL',
-        'HYRUS',
-        'DELTA',
+        'KULSOEM',
+        'DREAMSTORY',
+        'INIKAMI HIJAB',
+        'UNITED',
         'ALOOMNI',
+        'ALIS MILIARTA',
     ],
 
 };
@@ -224,103 +189,4 @@ const SULTAN_CONFIG = {
 
     });
 
-})();
-
-// HAMBURGER MENU
-(function(){
-  const nav = document.querySelector('.nav-inner');
-  if(!nav) return;
-  
-  // Create hamburger button
-  const btn = document.createElement('button');
-  btn.className = 'nav-hamburger';
-  btn.innerHTML = '<span></span><span></span><span></span>';
-  btn.setAttribute('aria-label','Menu');
-  nav.appendChild(btn);
-  
-  // Create overlay
-  const overlay = document.createElement('div');
-  overlay.className = 'nav-mobile-overlay';
-  document.body.appendChild(overlay);
-  
-  const links = document.querySelector('.nav-links');
-  
-  function toggleMenu(){
-    btn.classList.toggle('active');
-    links.classList.toggle('mobile-open');
-    overlay.classList.toggle('show');
-    document.body.style.overflow = links.classList.contains('mobile-open') ? 'hidden' : '';
-  }
-  
-  btn.addEventListener('click', toggleMenu);
-  overlay.addEventListener('click', toggleMenu);
-  
-  // Close on link click
-  links.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      if(links.classList.contains('mobile-open')) toggleMenu();
-    });
-  });
-})();
-
-// SCROLL ANIMATIONS
-(function(){
-  // Auto-add fade-up class to sections, cards, headings
-  document.querySelectorAll('.section > .container > h2, .section > .container > .section-label, .testi-card, .compare-table, .faq-list, .info-box, .product-card, [style*="display: grid"] > div, [style*="display:grid"] > div').forEach(function(el,i){
-    if(!el.classList.contains('fade-up') && !el.classList.contains('fade-left') && !el.classList.contains('fade-right')){
-      el.classList.add('fade-up');
-      el.style.transitionDelay = (i % 4) * 0.1 + 's';
-    }
-  });
-
-  var observer = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(entry.isIntersecting){
-        entry.target.classList.add('visible');
-      }
-    });
-  },{threshold:0.15,rootMargin:'0px 0px -50px 0px'});
-
-  document.querySelectorAll('.fade-up,.fade-left,.fade-right,.scale-in').forEach(function(el){
-    observer.observe(el);
-  });
-})();
-
-// COUNTER ANIMATION
-(function(){
-  var counted = false;
-  function animateCounter(el, target, suffix){
-    var start = 0;
-    var duration = 2000;
-    var step = Math.ceil(target / (duration / 16));
-    var current = 0;
-    var timer = setInterval(function(){
-      current += step;
-      if(current >= target){
-        current = target;
-        clearInterval(timer);
-      }
-      el.textContent = current.toLocaleString('id-ID') + (suffix || '');
-    }, 16);
-  }
-
-  // Find elements that look like stats (numbers with + or text)
-  var statObserver = new IntersectionObserver(function(entries){
-    entries.forEach(function(entry){
-      if(entry.isIntersecting && !counted){
-        counted = true;
-        // Find stat numbers in the visible section
-        document.querySelectorAll('[data-count]').forEach(function(el){
-          var target = parseInt(el.getAttribute('data-count'));
-          var suffix = el.getAttribute('data-suffix') || '';
-          animateCounter(el, target, suffix);
-        });
-      }
-    });
-  },{threshold:0.3});
-
-  // Auto-detect stat-like elements
-  document.querySelectorAll('.stats-grid .stat-number, [class*="stat"] [class*="number"]').forEach(function(el){
-    statObserver.observe(el);
-  });
 })();

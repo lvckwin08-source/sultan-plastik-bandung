@@ -35,6 +35,12 @@ style.textContent=`#sp-chat-btn{position:fixed;bottom:20px;right:20px;padding:8p
 .sp-quick-btn{background:#2a2a2a;border:1px solid rgba(200,168,75,.25);color:#C8A84B;padding:4px 10px;border-radius:20px;font-size:10px;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap;flex-shrink:0;scroll-snap-align:start}
 .sp-quick-btn:hover{background:#C8A84B;color:#1a1a1a}
 @keyframes spFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+#sp-chat-wa-wrap{display:flex;gap:8px;padding:8px 16px;background:#111;border-top:1px solid rgba(200,168,75,.1)}
+#sp-chat-wa-wrap a{flex:1;text-align:center;padding:8px 6px;border-radius:8px;font-size:11px;font-weight:700;text-decoration:none;font-family:Manrope,sans-serif;transition:all .15s}
+#sp-wa-konsul{background:#2a2a2a;color:#C8A84B;border:1px solid rgba(200,168,75,.3)}
+#sp-wa-konsul:hover{background:#C8A84B;color:#1a1a1a}
+#sp-wa-order{background:#C8A84B;color:#1a1a1a;border:1px solid #C8A84B}
+#sp-wa-order:hover{background:#b8922e;color:#1a1a1a}
 @media(max-width:480px){#sp-chat-box{width:calc(100vw - 32px);right:16px;bottom:88px;max-height:70vh}}`;
 document.head.appendChild(style);
 
@@ -56,6 +62,10 @@ div.innerHTML=`<button id="sp-chat-btn" onclick="spToggleChat()">
   </div>
   <div id="sp-chat-msgs"></div>
   <div id="sp-chat-quick-wrap"><button class="sp-q-arrow" onclick="spScrollQ(-1)">‹</button><div id="sp-chat-quick"></div><button class="sp-q-arrow" onclick="spScrollQ(1)">›</button></div>
+  <div id="sp-chat-wa-wrap">
+    <a id="sp-wa-konsul" href="https://wa.me/6281947931800?text=Halo%20Sultan%20Plastik%2C%20saya%20mau%20konsultasi" target="_blank" rel="noopener">💬 Konsultasi</a>
+    <a id="sp-wa-order" href="https://wa.me/6282127644474?text=Halo%20Admin%20Sultan%20Plastik%2C%20saya%20mau%20tanya%20harga%20dan%20order" target="_blank" rel="noopener">🛒 Order & Harga</a>
+  </div>
   <div id="sp-chat-input-wrap">
     <input id="sp-chat-input" placeholder="Ketik pertanyaan..." onkeydown="if(event.key==='Enter')spSend()">
     <button id="sp-chat-send" onclick="spSend()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
@@ -142,7 +152,7 @@ window.spReply=function(txt){
   if(best){
     spBotMsg(best.a);
   } else {
-    spBotMsg('Terima kasih atas pertanyaannya! Untuk jawaban lebih detail, langsung chat tim kami ya 😊<br><br><a href="https://wa.me/6281947931800?text='+encodeURIComponent('Halo Sultan Plastik, '+txt)+'" target="_blank">💬 Chat WhatsApp</a>');
+    spBotMsg('Pertanyaan bagus! Biar tim kami yang jawab langsung ya 😊<br><br><a href="https://wa.me/6282127644474?text='+encodeURIComponent('Halo Admin Sultan Plastik, '+txt)+'" target="_blank">🛒 Chat Admin (Order & Harga)</a><br><a href="https://wa.me/6281947931800?text='+encodeURIComponent('Halo Sultan Plastik, '+txt)+'" target="_blank">💬 Chat Konsultasi</a>');
   }
   setTimeout(spShowQuick, 300);
 }
