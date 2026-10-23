@@ -40,7 +40,7 @@ const SULTAN_CONFIG = {
         email: '',
 
         // Jam operasional
-        hours: 'Senin–Minggu · 24 Jam',
+        hours: 'Senin–Sabtu · 08.00–17.00 WIB',
     },
 
     // ====== ALAMAT WORKSHOP ======
