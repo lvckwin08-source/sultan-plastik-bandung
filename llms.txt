@@ -40,3 +40,4 @@
 - [Portfolio](https://www.sultanplastikbandung.id/portfolio.html)
 - [Tentang](https://www.sultanplastikbandung.id/tentang.html)
 - [Blog](https://www.sultanplastikbandung.id/blog.html)
+- [Polymailer Custom vs Polos](https://www.sultanplastikbandung.id/blog-polymailer-custom-vs-polos.html)
